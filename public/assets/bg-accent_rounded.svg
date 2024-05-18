@@ -1,0 +1,29 @@
+<!--
+  - Copyright 2023 Rohit Parihar and Bloggios
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1000" height="1000" viewBox="0 0 1000 1000"
+     xml:space="preserve">
+<desc>Created with Fabric.js 3.5.0</desc>
+<defs>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="rgba(0,0,0,0)"/>
+<g transform="matrix(7.6672 0 0 7.6672 500.0008 500.0008)" id="322845">
+<path style="stroke: rgb(255,255,255); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke" transform=" translate(-67.5, -67.5)" d="M 132.5 67.5 C 132.5 103.399 103.399 132.5 67.5 132.5 C 31.6015 132.5 2.5 103.399 2.5 67.5 C 2.5 31.6015 31.6015 2.5 67.5 2.5 C 103.399 2.5 132.5 31.6015 132.5 67.5 Z" stroke-linecap="round"/>
+</g>
+<g transform="matrix(-26.4887 0 0 26.4887 499.9996 499.9995)" id="SVGRepo_iconCarrier">
+<path style="stroke: rgb(66,88,255); stroke-width: 2.2; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: rgb(66,88,255); fill-rule: evenodd; opacity: 1;" transform=" translate(-8, -11)" d="M 1 2 C 0.44772 2 0 1.55228 0 1 C 0 0.44772 0.44772 0 1 0 H 8 C 11.3137 0 14 2.68629 14 6 C 14 7.72715 13.2702 9.2839 12.1022 10.3786 C 14.3791 11.2304 16 13.4259 16 16 C 16 19.3137 13.3137 22 10 22 H 1 C 0.44772 22 0 21.5523 0 21 C 0 20.4477 0.44772 20 1 20 V 2 z M 3 2 V 10 H 8 C 10.2091 10 12 8.20914 12 6 C 12 3.79086 10.2091 2 8 2 H 3 z M 3 12 V 20 H 10 C 12.2091 20 14 18.2091 14 16 C 14 13.7909 12.2091 12 10 12 H 3 z" stroke-linecap="round"/>
+</g>
+</svg>
