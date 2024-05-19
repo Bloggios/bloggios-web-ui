@@ -5,20 +5,27 @@ import BloggiosLogo from "@/components/custom/BloggiosLogo";
 
 export default function RootNavbar() {
     return (
-        <nav className={"sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"}>
+        <nav
+            className={"sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"}>
             <div className={"container flex h-14 max-w-screen-2xl items-center"}>
-                <div className={"mr-4 hidden md:flex"}>
-                    <Link href={"/"} className={"flex items-center space-x-2"} >
-                        <BloggiosLogo />
-                        <span className={"hidden text-xl sm:inline-block"}>
+                <Link href={"/"} className={"flex flex-shrink-0 items-center space-x-2"}>
+                    <BloggiosLogo/>
+                    <span className={"hidden text-xl sm:inline-block font-cursive"}>
                             Bloggios
                         </span>
-                    </Link>
-                </div>
-
+                </Link>
                 <div className={"flex flex-1 items-center justify-end space-x-2"}>
-                    <Link href={"https://github.com/Bloggios"} target={"_blank"} >
-                    {/*    inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 py-2 w-9 px-0*/}
+
+                    <div className={"flex items-center space-x-2 mr-4"}>
+                        <Button variant={"link"} size={"sm"}>
+                            Login
+                        </Button>
+
+                        <Button size={"sm"}>
+                            Signup
+                        </Button>
+                    </div>
+                    <Link href={"https://github.com/Bloggios"} target={"_blank"}>
                         <Button variant={"outline"} size={"icon"}>
                             <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +36,7 @@ export default function RootNavbar() {
                         </Button>
                     </Link>
 
-                    <ThemeToggleDropdown />
+                    <ThemeToggleDropdown/>
                 </div>
             </div>
         </nav>

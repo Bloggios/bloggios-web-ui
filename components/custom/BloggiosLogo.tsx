@@ -5,10 +5,10 @@ import {useTheme} from "next-themes";
 
 export default function BloggiosLogo() {
 
-    const {theme} = useTheme();
+    const {resolvedTheme} = useTheme();
     return (
         <Image
-            src={theme==="dark" ? "/assets/bg_logo_rounded_black.svg" : "/assets/bg_accent_outer_rounded.svg"}
+            src={resolvedTheme==="dark" ? "/assets/bg_logo_rounded_black.svg" : "/assets/bg_accent_outer_rounded.svg"}
             alt={"Bloggios"}
             height={34}
             width={34}
