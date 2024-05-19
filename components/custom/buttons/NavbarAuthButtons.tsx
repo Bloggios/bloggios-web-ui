@@ -8,7 +8,7 @@ export default function NavbarAuthButtons() {
     const router = useRouter();
 
     return (
-        <div className={"flex items-center space-x-2 mr-4"}>
+        <div className={"flex items-center space-x-2"}>
             <Button onClick={() => router.push("/login")} variant={"link"} size={"sm"}>
                 Login
             </Button>

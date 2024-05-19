@@ -3,7 +3,6 @@ import {Poppins} from "next/font/google";
 import "../globals.css";
 import {ThemeProvider} from "@/providers/ThemeProvider";
 import Head from "next/head";
-import RootNavbar from "@/components/custom/RootNavbar";
 import {NextUIProvider} from "@nextui-org/system";
 
 const poppins = Poppins({
@@ -31,7 +30,6 @@ export default function RootLayout({
         <Head>
             <link rel="icon" href="/favicon.ico"/>
         </Head>
-        {/*relative flex min-h-screen flex-col bg-background*/}
         <body className={`${poppins.variable} relative flex flex-col min-h-screen bg-background`}>
         <ThemeProvider
             attribute={"class"}
@@ -40,8 +38,15 @@ export default function RootLayout({
             disableTransitionOnChange
         >
             <NextUIProvider>
-                <RootNavbar/>
-                {children}
+                <main className={"flex flex-row min-h-screen w-full"}>
+                    <div className={"flex-1 flex-col hidden md:flex"}>
+                        Rohit Parihar
+                    </div>
+
+                    <div className={"flex-1 flex items-center justify-center"}>
+                        {children}
+                    </div>
+                </main>
             </NextUIProvider>
         </ThemeProvider>
         </body>
