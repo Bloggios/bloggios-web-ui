@@ -2,29 +2,22 @@ import Link from "next/link";
 import ThemeToggleDropdown from "@/components/custom/ThemeToggleDropdown";
 import {Button} from "@/components/ui/button";
 import BloggiosLogo from "@/components/custom/BloggiosLogo";
+import NavbarAuthButtons from "@/components/custom/buttons/NavbarAuthButtons";
 
 export default function RootNavbar() {
+
     return (
         <nav
             className={"sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"}>
             <div className={"container flex h-14 max-w-screen-2xl items-center"}>
                 <Link href={"/"} className={"flex flex-shrink-0 items-center space-x-2"}>
                     <BloggiosLogo/>
-                    <span className={"hidden text-xl sm:inline-block font-cursive"}>
+                    <span className={"hidden text-xl sm:inline-block font-cursive pt-[4px]"}>
                             Bloggios
                         </span>
                 </Link>
                 <div className={"flex flex-1 items-center justify-end space-x-2"}>
-
-                    <div className={"flex items-center space-x-2 mr-4"}>
-                        <Button variant={"link"} size={"sm"}>
-                            Login
-                        </Button>
-
-                        <Button size={"sm"}>
-                            Signup
-                        </Button>
-                    </div>
+                    <NavbarAuthButtons />
                     <Link href={"https://github.com/Bloggios"} target={"_blank"}>
                         <Button variant={"outline"} size={"icon"}>
                             <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
