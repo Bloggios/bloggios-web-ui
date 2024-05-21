@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.V4_VPS_PRIVATE_KEY }}
           port: 22
           script: |
-            cd /root/bloggios_web-ui
+            cd /root/bloggios-web-ui
             pm2 stop bloggios-web-ui-devsandbox
             set +e
             rm build -r
