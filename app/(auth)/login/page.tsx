@@ -2,9 +2,9 @@ import {Metadata} from "next";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import SocialAuthButtons from "@/components/custom/buttons/SocialAuthButtons";
 import TextDivider from "@/components/custom/TextDivider";
-import {Button, Input} from "@nextui-org/react";
 import Link from "next/link";
 import {Separator} from "@/components/ui/separator";
+import LoginForm from "@/components/custom/forms/LoginForm";
 
 export const metadata : Metadata = {
     title: "Login",
@@ -28,7 +28,7 @@ export const metadata : Metadata = {
 
 export default function LoginPage() {
     return (
-        <Card className={"auth-w-clamp md:w-[400px] h-fit py-2"}>
+        <Card className={"auth-w-clamp md:w-[400px] h-fit py-2 px-0"}>
             <CardHeader>
                 <CardTitle className={"text-center text-xl"}>Sign in to Bloggios</CardTitle>
                 <CardDescription className={"text-center"}>Welcome back! Please sign in to continue</CardDescription>
@@ -36,35 +36,7 @@ export default function LoginPage() {
             <CardContent className={"w-full"}>
                 <SocialAuthButtons/>
                 <TextDivider text={"or"} />
-
-                <form className={"flex flex-col gap-6"}>
-                    <Input
-                        isClearable
-                        type="email"
-                        variant={"bordered"}
-                        label="Email"
-                        maxLength={40}
-                        required
-                    />
-
-                    <div className={"flex flex-col gap-2"}>
-                        <Input
-                            isClearable
-                            type="password"
-                            variant={"bordered"}
-                            label="Password"
-                            maxLength={40}
-                            required
-                        />
-                        <Link href={"/"} className={"text-xs hover:underline self-end pr-2"} >
-                            Forget Password
-                        </Link>
-                    </div>
-
-                    <Button color={"primary"}>
-                        Login
-                    </Button>
-                </form>
+                <LoginForm />
             </CardContent>
             <CardFooter className={"flex flex-col gap-4 mt-2"}>
                 <Separator />

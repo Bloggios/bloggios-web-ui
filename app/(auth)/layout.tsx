@@ -4,6 +4,7 @@ import "../globals.css";
 import Head from "next/head";
 import {NextUIProvider} from "@nextui-org/system";
 import AuthPageCard from "@/components/custom/sections/AuthPageCard";
+import Link from "next/link";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -31,7 +32,7 @@ export default function RootLayout({
             <link rel="icon" href="/favicon.ico"/>
         </Head>
         <body className={`${poppins.variable} relative flex flex-col min-h-screen bg-auth-bg bg-cover bg-no-repeat bg-fixed`}>
-            <NextUIProvider>
+            <NextUIProvider className={"flex flex-col min-h-screen justify-between relative"}>
                 <main className={"flex flex-row w-full mt-10 md:mt-20 lg:space-x-20"}>
                     <div className={"flex-1 hidden lg:flex justify-end"}>
                         <AuthPageCard />
@@ -41,6 +42,18 @@ export default function RootLayout({
                         {children}
                     </div>
                 </main>
+
+                <footer className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 mb-4 text-white text-muted-foreground text-xs font-extralight"}>
+                    <Link href={"/"} className={"hover:underline"}>© Bloggios 2024</Link>
+
+                    <div className={"flex gap-4"}>
+                        <Link href={"/"} className={"hover:underline"} >
+                            Privacy
+                        </Link>
+
+                        <Link className={"hover:underline"} href={"/"}>Terms and Conditions</Link>
+                    </div>
+                </footer>
             </NextUIProvider>
         </body>
         </html>
