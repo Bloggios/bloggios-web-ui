@@ -28,7 +28,7 @@ export const metadata : Metadata = {
 
 export default function LoginPage() {
     return (
-        <Card className={"w-[300px] md:w-[400px] py-2"}>
+        <Card className={"auth-w-clamp md:w-[400px] h-fit py-2"}>
             <CardHeader>
                 <CardTitle className={"text-center text-xl"}>Sign in to Bloggios</CardTitle>
                 <CardDescription className={"text-center"}>Welcome back! Please sign in to continue</CardDescription>
@@ -69,7 +69,7 @@ export default function LoginPage() {
             <CardFooter className={"flex flex-col gap-4 mt-2"}>
                 <Separator />
                 <span className={"text-sm text-muted-foreground"}>
-                    Don&apos;t have an account? <Link href={"/signup"} className={"hover:underline"}>Sign up</Link>
+                    Don&apos;t have an account? <Link href={"/signup"} className={"hover:underline text-black"}>Sign up</Link>
                 </span>
             </CardFooter>
         </Card>

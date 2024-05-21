@@ -1,9 +1,9 @@
 import type {Metadata} from "next";
 import {Poppins} from "next/font/google";
 import "../globals.css";
-import {ThemeProvider} from "@/providers/ThemeProvider";
 import Head from "next/head";
 import {NextUIProvider} from "@nextui-org/system";
+import AuthPageCard from "@/components/custom/sections/AuthPageCard";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -30,25 +30,18 @@ export default function RootLayout({
         <Head>
             <link rel="icon" href="/favicon.ico"/>
         </Head>
-        <body className={`${poppins.variable} relative flex flex-col min-h-screen bg-background`}>
-        <ThemeProvider
-            attribute={"class"}
-            defaultTheme={"system"}
-            enableSystem
-            disableTransitionOnChange
-        >
+        <body className={`${poppins.variable} relative flex flex-col min-h-screen bg-auth-bg bg-cover bg-no-repeat bg-fixed`}>
             <NextUIProvider>
-                <main className={"flex flex-row min-h-screen w-full"}>
-                    <div className={"flex-1 flex-col hidden md:flex"}>
-                        Rohit Parihar
+                <main className={"flex flex-row w-full mt-10 md:mt-20 lg:space-x-20"}>
+                    <div className={"flex-1 hidden lg:flex justify-end"}>
+                        <AuthPageCard />
                     </div>
 
-                    <div className={"flex-1 flex items-center justify-center"}>
+                    <div className={"flex-1 flex lg:justify-start justify-center"}>
                         {children}
                     </div>
                 </main>
             </NextUIProvider>
-        </ThemeProvider>
         </body>
         </html>
     );

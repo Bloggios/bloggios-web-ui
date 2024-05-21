@@ -20,6 +20,9 @@ const config = {
       },
     },
     extend: {
+      backgroundImage: {
+        'auth-bg': "url(/assets/signin-bg.svg)"
+      },
       fontFamily: {
         cursive: ['"Dancing Script", "cursive"']
       },
