@@ -19,11 +19,6 @@ jobs:
           script: |
             cd /root/bloggios-web-ui
             pm2 stop bloggios-web-ui-devsandbox
-            set +e
-            rm build -r
-            rm node_modules -r
-            set -e
-            git stash
             git pull
             npm cache clean --force 
             npm install
