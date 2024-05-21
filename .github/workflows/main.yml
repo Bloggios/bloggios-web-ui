@@ -1,0 +1,29 @@
+name: Bloggios Web UI devsandbox
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.V4_HOST }}
+          username: ${{ secrets.V4_USERNAME }}
+          key: ${{ secrets.V4_VPS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /root/bloggios_web-ui
+            pm2 stop bloggios-web-ui-devsandbox
+            rm build -r
+            rm node_modules -r
+            git stash
+            git pull
+            npm cache clean --force 
+            npm install
+            npm run build
+            pm2 restart devsandbox.config.js
