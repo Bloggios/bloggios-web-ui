@@ -18,7 +18,6 @@ jobs:
           port: 22
           script: |
             cd /root/bloggios-web-ui
-            pm2 stop bloggios-web-ui-devsandbox
             git pull
             npm cache clean --force 
             npm install
