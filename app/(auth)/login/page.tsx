@@ -5,6 +5,7 @@ import TextDivider from "@/components/custom/TextDivider";
 import Link from "next/link";
 import {Separator} from "@/components/ui/separator";
 import LoginForm from "@/components/custom/forms/LoginForm";
+import bgAccentOuterRounded from "@/public/assets/bg_accent_outer_rounded.svg";
 
 export const metadata : Metadata = {
     title: "Login",
@@ -16,7 +17,7 @@ export const metadata : Metadata = {
         description: "Login to Bloggios, your all-in-one platform for blogs, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
         type: "website",
         url: "https://bloggios.com/login",
-        images: "/assets/bg_accent_outer_rounded.svg",
+        images: bgAccentOuterRounded,
     },
     twitter: {
         title: "Bloggios Login",
