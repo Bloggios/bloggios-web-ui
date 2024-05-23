@@ -5,6 +5,10 @@ import Head from "next/head";
 import {NextUIProvider} from "@nextui-org/system";
 import AuthPageCard from "@/components/custom/sections/AuthPageCard";
 import Link from "next/link";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {ApplicationProvider} from "@/providers/ApplicationProvider";
+import {Toaster} from "sonner";
+import BloggiosToast from "@/components/custom/BloggiosToast";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -31,11 +35,15 @@ export default function RootLayout({
         <Head>
             <link rel="icon" href="/favicon.ico"/>
         </Head>
-        <body className={`${poppins.variable} relative flex flex-col min-h-screen bg-auth-bg bg-cover bg-no-repeat bg-fixed`}>
+        <body
+            className={`${poppins.variable} relative flex flex-col min-h-screen bg-auth-bg bg-cover bg-no-repeat bg-fixed`}>
+        <ApplicationProvider>
+            <BloggiosToast />
             <NextUIProvider className={"flex flex-col min-h-screen justify-between relative"}>
                 <main className={"flex flex-row w-full mt-10 md:mt-20 lg:space-x-20"}>
+
                     <div className={"flex-1 hidden lg:flex justify-end"}>
-                        <AuthPageCard />
+                        <AuthPageCard/>
                     </div>
 
                     <div className={"flex-1 flex lg:justify-start justify-center"}>
@@ -43,11 +51,12 @@ export default function RootLayout({
                     </div>
                 </main>
 
-                <footer className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 mb-4 text-white text-muted-foreground text-xs font-extralight"}>
+                <footer
+                    className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 mb-4 text-white text-muted-foreground text-xs font-extralight"}>
                     <Link href={"/"} className={"hover:underline"}>© Bloggios 2024</Link>
 
                     <div className={"flex gap-4"}>
-                        <Link href={"/"} className={"hover:underline"} >
+                        <Link href={"/"} className={"hover:underline"}>
                             Privacy
                         </Link>
 
@@ -55,6 +64,7 @@ export default function RootLayout({
                     </div>
                 </footer>
             </NextUIProvider>
+        </ApplicationProvider>
         </body>
         </html>
     );
