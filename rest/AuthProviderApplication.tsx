@@ -1,12 +1,27 @@
 import {SignupData} from "@/interfaces/SignupData";
 import {gatewayAxios} from "@/rest/BaseAxios";
-import {SIGNUP_USER} from "@/constants/ApiEndpointConstants";
-import {v4 as uuidv4} from 'uuid';
+import {RESEND_OTP, SIGNUP_USER, VERIFY_OTP} from "@/constants/ApiEndpointConstants";
 
 export const signupUser = (signupData: SignupData) => {
-    return gatewayAxios.post(SIGNUP_USER, signupData, {
+    return gatewayAxios.post(SIGNUP_USER, signupData)
+        .then(response => response.data);
+}
+
+export const verifyOtp = (otp: string, userId: string) => {
+    return gatewayAxios.get(VERIFY_OTP, {
         headers: {
-            "breadcrumbId": uuidv4()
+            'otp': otp
+        },
+        params: {
+            'userId': userId
         }
-    }).then(response => response.data);
+    }).then((response)=> response.data);
+}
+
+export const resendOtp = (userId: string) => {
+    return gatewayAxios.get(RESEND_OTP, {
+        params: {
+            'userId': userId
+        }
+    }).then((response)=> response.data);
 }

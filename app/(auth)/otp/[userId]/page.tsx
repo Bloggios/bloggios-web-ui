@@ -1,12 +1,6 @@
 import {Metadata} from "next";
 import bgAccentOuterRounded from "@/public/assets/bg_accent_outer_rounded.svg";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
-import SocialAuthButtons from "@/components/custom/buttons/SocialAuthButtons";
-import TextDivider from "@/components/custom/TextDivider";
-import LoginForm from "@/components/custom/forms/LoginForm";
-import {Separator} from "@/components/ui/separator";
-import Link from "next/link";
-import {InputOTP} from "@/components/ui/input-otp";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {uuidValidator} from "@/utils/Validators";
 import {redirect} from "next/navigation";
 import RegistrationOtpForm from "@/components/custom/forms/RegistrationOtpForm";
