@@ -21,19 +21,18 @@
 import {useEffect, useLayoutEffect, useState} from "react";
 
 interface WindowDimensions {
-    width: number | undefined;
-    height: number | undefined;
+    width: number | 0;
+    height: number | 0;
 }
 
 const useWindowDimensions = (): WindowDimensions => {
 
     const [windowSize, setWindowSize] = useState<WindowDimensions>({
-        width: undefined,
-        height: undefined,
+        width: 0,
+        height: 0,
     });
 
     useEffect(() => {
-        // Handler to call on window resize
         function handleResize() {
             setWindowSize({
                 width: window.innerWidth,
