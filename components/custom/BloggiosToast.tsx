@@ -1,16 +1,16 @@
 "use client";
 
 import {toast, Toaster} from "sonner";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useDispatch, useSelector} from "react-redux";
 import {clearSnackbar, SnackbarState} from "@/state/snackbarSlice";
 import {RootState} from "@/state/store";
 import {useRouter} from "next/navigation";
 import {useCallback, useEffect} from "react";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export default function BloggiosToast() {
 
-    const {width} = useWindowDimensions();
+    const isBreakPoint = useMediaQuery(640);
     const router = useRouter();
     const dispatch = useDispatch();
     const { snackbarType, message, isSnackbar, path } = useSelector((state: RootState) => state.snackbar);
@@ -61,7 +61,7 @@ export default function BloggiosToast() {
 
     return (
         <Toaster
-            position={width > 640 ? "top-right" : "bottom-center"}
+            position={isBreakPoint ? "bottom-center" : "top-right"}
             richColors={true}
         />
     )
