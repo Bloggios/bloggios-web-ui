@@ -2,7 +2,7 @@
 
 import {toast, Toaster} from "sonner";
 import {useDispatch, useSelector} from "react-redux";
-import {clearSnackbar, SnackbarState} from "@/state/snackbarSlice";
+import {clearSnackbar} from "@/state/snackbarSlice";
 import {RootState} from "@/state/store";
 import {useRouter} from "next/navigation";
 import {useCallback, useEffect} from "react";

@@ -9,6 +9,7 @@ import {SignupData} from "@/interfaces/SignupData";
 import {signupUser} from "@/rest/AuthProviderApplication";
 import {dispatchError, dispatchSuccessMessage} from "@/utils/DispatchFunctions";
 import {useDispatch} from "react-redux";
+import {useRouter} from "next/navigation";
 
 export default function SignupForm() {
 
@@ -22,6 +23,7 @@ export default function SignupForm() {
         password: ""
     });
     const dispatch = useDispatch();
+    const router  = useRouter();
 
     const handleInputChange = (
         event: ChangeEvent<HTMLInputElement>,
@@ -86,7 +88,7 @@ export default function SignupForm() {
         mutationFn: () => signupUser(data),
         onSuccess: async (response) => {
             dispatchSuccessMessage(dispatch, response.message);
-            // Navigate to OTP Page
+            router.push(`/otp/${response?.userId}`);
         },
         onError: (error) => {
             dispatchError(dispatch, error);
