@@ -4,8 +4,10 @@ import SocialAuthButtons from "@/components/custom/buttons/SocialAuthButtons";
 import TextDivider from "@/components/custom/TextDivider";
 import Link from "next/link";
 import {Separator} from "@/components/ui/separator";
-import LoginForm from "@/components/custom/forms/LoginForm";
 import bgAccentOuterRounded from "@/public/assets/bg_accent_outer_rounded.svg";
+import dynamic from "next/dynamic";
+
+const LoginForm = dynamic(()=> import("@/components/custom/forms/LoginForm"));
 
 export const metadata : Metadata = {
     title: "Login",

@@ -52,7 +52,7 @@ export default function RootLayout({
                 </main>
 
                 <footer
-                    className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 mb-4 text-white text-muted-foreground text-xs font-extralight"}>
+                    className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 my-4 text-white text-muted-foreground text-xs font-extralight"}>
                     <Link href={"/"} className={"hover:underline"}>© Bloggios 2024</Link>
 
                     <div className={"flex gap-4"}>

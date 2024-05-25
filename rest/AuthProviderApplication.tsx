@@ -1,6 +1,13 @@
 import {SignupData} from "@/interfaces/SignupData";
 import {gatewayAxios} from "@/rest/BaseAxios";
-import {RESEND_OTP, SIGNUP_USER, VERIFY_OTP} from "@/constants/ApiEndpointConstants";
+import {
+    LOGIN_USER,
+    OTP_AUTH_USER_ID_REDIRECT,
+    RESEND_OTP,
+    SIGNUP_USER,
+    VERIFY_OTP
+} from "@/constants/ApiEndpointConstants";
+import {LoginData} from "@/interfaces/LoginData";
 
 export const signupUser = (signupData: SignupData) => {
     return gatewayAxios.post(SIGNUP_USER, signupData)
@@ -24,4 +31,14 @@ export const resendOtp = (userId: string) => {
             'userId': userId
         }
     }).then((response)=> response.data);
+}
+
+export const loginUser = (loginData: LoginData) => {
+    return gatewayAxios.post(LOGIN_USER, loginData)
+        .then(response => response.data);
+}
+
+export const otpAuthUserIdRedirect = (authData: LoginData) => {
+    return gatewayAxios.post(OTP_AUTH_USER_ID_REDIRECT, authData)
+        .then((response)=> response.data);
 }

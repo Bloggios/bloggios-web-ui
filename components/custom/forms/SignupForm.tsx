@@ -73,17 +73,6 @@ export default function SignupForm() {
         }
     }
 
-    const handleInputClear = (property: keyof SignupData) => {
-        setErrorData(prevState => ({
-            ...prevState,
-            [property]: ''
-        }));
-        setData(prevState => ({
-            ...prevState,
-            [property]: ''
-        }));
-    }
-
     const signupMutation = useMutation({
         mutationFn: () => signupUser(data),
         onSuccess: async (response) => {
@@ -109,8 +98,6 @@ export default function SignupForm() {
     return (
         <form onSubmit={handleSubmit} className={"flex flex-col gap-6"}>
             <Input
-                isClearable
-                onClear={()=> handleInputClear("email")}
                 type="email"
                 variant={"bordered"}
                 label="Email"
@@ -137,7 +124,7 @@ export default function SignupForm() {
                         isIconOnly={true}
                         variant={"faded"}
                         size={"sm"}
-                        className={"bg-transparent rounded-full border-none"}
+                        className={"bg-transparent rounded-full border-none outline-none"}
                     >
                         {isPasswordVisible ? (
                             <EyeClosedIcon />
