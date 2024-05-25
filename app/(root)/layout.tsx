@@ -1,9 +1,10 @@
-import type {Metadata} from "next";
+import {ApplicationProvider} from "@/providers/ApplicationProvider";
+import {RefreshTokenProvider} from "@/providers/RefreshTokenProvider";
+import React from "react";
 import {Poppins} from "next/font/google";
+import {NextUIProvider} from "@nextui-org/system";
 import "../globals.css";
-import {ThemeProvider} from "@/providers/ThemeProvider";
-import Head from "next/head";
-import RootNavbar from "@/components/custom/RootNavbar";
+import {ThemeProvider} from "next-themes";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -11,23 +12,19 @@ const poppins = Poppins({
     variable: "--font-poppins"
 })
 
-export const metadata: Metadata = {
-    title: "Bloggios",
+export const metadata = {
+    title: 'Bloggios',
     keywords: "Bloggios, blogs, tech blogs, Q&A, posts, messaging, community, insights, questions, engagement, rohit parihar, rohit",
     description: "Bloggios, your all-in-one platform for blogs, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
-};
+}
 
-export default function RootLayout({
+export default function AuthLayout({
                                        children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+                                   }: {
+    children: React.ReactNode
+}) {
     return (
-        <html lang="en">
-        <Head>
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
-        {/*relative flex min-h-screen flex-col bg-background*/}
+        <html suppressHydrationWarning lang="en">
         <body className={`${poppins.variable} relative flex flex-col min-h-screen bg-background`}>
         <ThemeProvider
             attribute={"class"}
@@ -35,10 +32,15 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-            <RootNavbar />
-            {children}
+            <NextUIProvider>
+                <ApplicationProvider>
+                    <RefreshTokenProvider>
+                        {children}
+                    </RefreshTokenProvider>
+                </ApplicationProvider>
+            </NextUIProvider>
         </ThemeProvider>
         </body>
         </html>
-    );
+    )
 }

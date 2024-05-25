@@ -9,6 +9,8 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ApplicationProvider} from "@/providers/ApplicationProvider";
 import {Toaster} from "sonner";
 import BloggiosToast from "@/components/custom/BloggiosToast";
+import {RefreshTokenProvider} from "@/providers/RefreshTokenProvider";
+import IsAuthenticated from "@/components/functional/IsAuthenticated";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -38,31 +40,33 @@ export default function RootLayout({
         <body
             className={`${poppins.variable} relative flex flex-col min-h-screen bg-auth-bg bg-cover bg-no-repeat bg-fixed`}>
         <ApplicationProvider>
-            <BloggiosToast />
+            <BloggiosToast/>
             <NextUIProvider className={"flex flex-col min-h-screen justify-between relative"}>
-                <main className={"flex flex-row w-full mt-10 md:mt-20 lg:space-x-20"}>
+                <RefreshTokenProvider>
+                    <main className={"flex flex-row w-full mt-10 md:mt-20 lg:space-x-20"}>
+                        <IsAuthenticated />
+                        <div className={"flex-1 hidden lg:flex justify-end"}>
+                            <AuthPageCard/>
+                        </div>
 
-                    <div className={"flex-1 hidden lg:flex justify-end"}>
-                        <AuthPageCard/>
-                    </div>
+                        <div className={"flex-1 flex lg:justify-start justify-center"}>
+                            {children}
+                        </div>
+                    </main>
 
-                    <div className={"flex-1 flex lg:justify-start justify-center"}>
-                        {children}
-                    </div>
-                </main>
+                    <footer
+                        className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 my-4 text-white text-muted-foreground text-xs font-extralight"}>
+                        <Link href={"/"} className={"hover:underline"}>© Bloggios 2024</Link>
 
-                <footer
-                    className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 my-4 text-white text-muted-foreground text-xs font-extralight"}>
-                    <Link href={"/"} className={"hover:underline"}>© Bloggios 2024</Link>
+                        <div className={"flex gap-4"}>
+                            <Link href={"/"} className={"hover:underline"}>
+                                Privacy
+                            </Link>
 
-                    <div className={"flex gap-4"}>
-                        <Link href={"/"} className={"hover:underline"}>
-                            Privacy
-                        </Link>
-
-                        <Link className={"hover:underline"} href={"/"}>Terms and Conditions</Link>
-                    </div>
-                </footer>
+                            <Link className={"hover:underline"} href={"/"}>Terms and Conditions</Link>
+                        </div>
+                    </footer>
+                </RefreshTokenProvider>
             </NextUIProvider>
         </ApplicationProvider>
         </body>

@@ -18,22 +18,50 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {configureStore, EnhancedStore} from "@reduxjs/toolkit";
-import snackbarSlice, {SnackbarState} from "./snackbarSlice";
-import authSlice, {AuthSliceState} from "@/state/authSlice";
+import {createSlice} from "@reduxjs/toolkit";
 
-interface RootState {
-    snackbar: SnackbarState,
-    auth: AuthSliceState
+interface AuthSliceState {
+    userId: string | null,
+    accessToken: string | null,
+    isAuthenticated: boolean,
+    remoteAddress: string | null,
+    authorities: string | null,
+    email: string | null,
 }
 
-const store: EnhancedStore<RootState> = configureStore({
-    reducer: {
-        snackbar: snackbarSlice,
-        auth: authSlice,
-    },
-    devTools: true
-})
+const initialState: AuthSliceState = {
+    userId: null,
+    accessToken: null,
+    isAuthenticated: false,
+    remoteAddress: null,
+    authorities: null,
+    email: null
+};
 
-export default store;
-export type {RootState};
+const authSlice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {
+        setCredentials: (state, action) => {
+            const {userId, accessToken, isAuthenticated, remoteAddress, authorities, email} = action.payload;
+            state.userId = userId;
+            state.accessToken = accessToken;
+            state.isAuthenticated = isAuthenticated;
+            state.remoteAddress = remoteAddress;
+            state.authorities = authorities;
+            state.email = email;
+        },
+        clearCredentials: (state) => {
+            state.userId = null;
+            state.accessToken = null;
+            state.isAuthenticated = false;
+            state.remoteAddress = null;
+            state.authorities = null;
+            state.email = null;
+        }
+    }
+});
+
+export default authSlice.reducer;
+export const {setCredentials, clearCredentials} = authSlice.actions;
+export type {AuthSliceState}

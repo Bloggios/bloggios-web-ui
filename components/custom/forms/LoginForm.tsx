@@ -52,7 +52,6 @@ export default function LoginForm() {
     const otpAuthUserId = useMutation({
         mutationFn: ()=> otpAuthUserIdRedirect(data),
         onSuccess: (response)=> {
-            console.log(response)
             dispatchWarningMessage(dispatch, "Please enter OTP send on your email to Verify your email");
             resendOtpMutation.mutateAsync(response.userId)
                 .then(()=> {
@@ -67,8 +66,7 @@ export default function LoginForm() {
     const loginMutation = useMutation({
         mutationFn: () => loginUser(data),
         onSuccess: async (response) => {
-            dispatchSuccessMessage(dispatch, response.message);
-            console.log(response)
+            router.push("/dashboard");
         },
         onError: (error: AxiosError) => {
             // @ts-ignore

@@ -2,7 +2,7 @@ import {SignupData} from "@/interfaces/SignupData";
 import {gatewayAxios} from "@/rest/BaseAxios";
 import {
     LOGIN_USER,
-    OTP_AUTH_USER_ID_REDIRECT,
+    OTP_AUTH_USER_ID_REDIRECT, REFRESH_TOKEN,
     RESEND_OTP,
     SIGNUP_USER,
     VERIFY_OTP
@@ -41,4 +41,10 @@ export const loginUser = (loginData: LoginData) => {
 export const otpAuthUserIdRedirect = (authData: LoginData) => {
     return gatewayAxios.post(OTP_AUTH_USER_ID_REDIRECT, authData)
         .then((response)=> response.data);
+}
+
+export const refreshToken = () => {
+    return gatewayAxios.get(REFRESH_TOKEN, {
+        withCredentials: true
+    }).then((response)=> response.data);
 }
