@@ -1,5 +1,3 @@
-import {ApplicationProvider} from "@/providers/ApplicationProvider";
-import {RefreshTokenProvider} from "@/providers/RefreshTokenProvider";
 import React from "react";
 import MandateAuthenticate from "@/components/functional/MandateAuthenticate";
 

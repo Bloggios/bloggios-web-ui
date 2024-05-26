@@ -5,6 +5,7 @@ import {Poppins} from "next/font/google";
 import {NextUIProvider} from "@nextui-org/system";
 import "../globals.css";
 import {ThemeProvider} from "next-themes";
+import BloggiosToast from "@/components/custom/BloggiosToast";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function AuthLayout({
             <NextUIProvider>
                 <ApplicationProvider>
                     <RefreshTokenProvider>
+                        <BloggiosToast />
                         {children}
                     </RefreshTokenProvider>
                 </ApplicationProvider>

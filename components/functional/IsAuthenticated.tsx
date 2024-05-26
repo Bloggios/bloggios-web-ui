@@ -8,13 +8,14 @@ import {dispatchWarningMessage} from "@/utils/DispatchFunctions";
 
 export default function IsAuthenticated() {
 
-    const {isAuthenticated} = useSelector((state: RootState) => state.auth);
+    const {isAuthenticated, authorities} = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
 
     useLayoutEffect(() => {
-        if (isAuthenticated) {
-            dispatchWarningMessage(dispatch, "You are already logged in.");
+        if (isAuthenticated && !authorities?.includes('ROLE_DUMMY')) {
             redirect("/dashboard");
+        } else if (isAuthenticated && authorities?.includes('ROLE_DUMMY')) {
+            redirect("/profile-addition-initial");
         }
     }, [dispatch]);
 

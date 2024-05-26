@@ -16,3 +16,13 @@ export const gatewayAxios = axios.create(
         }
     }
 )
+
+export const authenticatedAxios = axios.create(
+    {
+        baseURL: baseURL,
+        withCredentials: true,
+        headers: {
+            "breadcrumbId": uuid()
+        }
+    }
+)

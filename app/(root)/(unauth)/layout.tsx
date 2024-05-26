@@ -8,6 +8,7 @@ import {ApplicationProvider} from "@/providers/ApplicationProvider";
 import BloggiosToast from "@/components/custom/BloggiosToast";
 import {NextUIProvider} from "@nextui-org/system";
 import {RefreshTokenProvider} from "@/providers/RefreshTokenProvider";
+import RedirectProfileNotAdded from "@/components/functional/RedirectProfileNotAdded";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({
 }>) {
     return (
         <>
+            <RedirectProfileNotAdded />
             <RootNavbar />
             {children}
         </>
