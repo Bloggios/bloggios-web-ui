@@ -3,7 +3,7 @@ import {Poppins} from "next/font/google";
 import "../../globals.css";
 import {ThemeProvider} from "@/providers/ThemeProvider";
 import Head from "next/head";
-import RootNavbar from "@/components/custom/RootNavbar";
+import RootNavbar from "@/components/custom/navbars/RootNavbar";
 import {ApplicationProvider} from "@/providers/ApplicationProvider";
 import BloggiosToast from "@/components/custom/BloggiosToast";
 import {NextUIProvider} from "@nextui-org/system";

@@ -1,5 +1,6 @@
 import React from "react";
 import MandateAuthenticate from "@/components/functional/MandateAuthenticate";
+import AuthenticatedNavbar from "@/components/custom/navbars/AuthenticatedNavbar";
 
 export const metadata = {
     title: 'Next.js',
@@ -14,6 +15,7 @@ export default function AuthLayout({
     return (
         <>
             <MandateAuthenticate />
+            <AuthenticatedNavbar />
             {children}
         </>
     )

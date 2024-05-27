@@ -1,7 +1,7 @@
 import MandateAuthenticate from "@/components/functional/MandateAuthenticate";
 import AuthPageCard from "@/components/custom/sections/AuthPageCard";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
-import RootNavbar from "@/components/custom/RootNavbar";
+import RootNavbar from "@/components/custom/navbars/RootNavbar";
 import SocialAuthButtons from "@/components/custom/buttons/SocialAuthButtons";
 import TextDivider from "@/components/custom/TextDivider";
 import {Separator} from "@/components/ui/separator";
