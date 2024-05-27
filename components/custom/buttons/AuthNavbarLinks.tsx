@@ -16,7 +16,7 @@ export default function AuthNavbarLinks() {
     ];
 
     return (
-        <div className="hidden md:flex items-center gap-4 text-sm lg:gap-6 font-extralight tracking-wide">
+        <div className="hidden md:flex items-center gap-4 text-sm lg:gap-6 font-light dark:font-extralight tracking-wide">
             {links.map(link => {
                 const isActive = pathname.includes(link.href);
                 return (

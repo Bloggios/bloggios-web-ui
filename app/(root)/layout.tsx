@@ -26,7 +26,7 @@ export default function AuthLayout({
 }) {
     return (
         <html suppressHydrationWarning lang="en">
-        <body className={`${poppins.variable} relative flex flex-col min-h-screen bg-background`}>
+        <body className={`${poppins.variable} min-h-screen`}>
         <ThemeProvider
             attribute={"class"}
             defaultTheme={"system"}
