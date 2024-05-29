@@ -34,12 +34,12 @@ export default function AuthLayout({
             disableTransitionOnChange
         >
             <NextUIProvider>
-                <ApplicationProvider>
-                    <RefreshTokenProvider>
-                        <BloggiosToast />
-                        {children}
-                    </RefreshTokenProvider>
-                </ApplicationProvider>
+                    <ApplicationProvider>
+                        <RefreshTokenProvider>
+                            <BloggiosToast/>
+                            {children}
+                        </RefreshTokenProvider>
+                    </ApplicationProvider>
             </NextUIProvider>
         </ThemeProvider>
         </body>

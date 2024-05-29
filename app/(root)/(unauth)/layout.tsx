@@ -1,13 +1,5 @@
-import type {Metadata} from "next";
 import {Poppins} from "next/font/google";
 import "../../globals.css";
-import {ThemeProvider} from "@/providers/ThemeProvider";
-import Head from "next/head";
-import RootNavbar from "@/components/custom/navbars/RootNavbar";
-import {ApplicationProvider} from "@/providers/ApplicationProvider";
-import BloggiosToast from "@/components/custom/BloggiosToast";
-import {NextUIProvider} from "@nextui-org/system";
-import {RefreshTokenProvider} from "@/providers/RefreshTokenProvider";
 import RedirectProfileNotAdded from "@/components/functional/RedirectProfileNotAdded";
 import DynamicNavbarProvider from "@/components/custom/navbars/DynamicNavbarProvider";
 import {Separator} from "@/components/ui/separator";

@@ -12,7 +12,7 @@ export default function AuthNavbarLinks() {
         { href: '/blogs', label: 'Blogs' },
         { href: '/messaging', label: 'Messaging' },
         { href: '/events', label: 'Events' },
-        { href: '/questions', label: 'Q&A' },
+        { href: '/discussion', label: 'Discussions' },
     ];
 
     return (
