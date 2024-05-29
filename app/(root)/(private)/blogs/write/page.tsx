@@ -50,6 +50,7 @@ export default function WriteBlogs() {
     const [isSuggestion, setIsSuggestion] = useState(false);
     const chipColors = ['bg-purple-700', 'bg-red-700', 'bg-amber-700', 'bg-blue-700'];
     const suggestionWrapperRef = useRef<HTMLDivElement>(null);
+    const [titleFocus, setTitleFocus] = useState<boolean>(false);
 
     const handleClickOutside = (event: MouseEvent) => {
         if (suggestionWrapperRef.current && !suggestionWrapperRef.current.contains(event.target as Node)) {
@@ -103,6 +104,10 @@ export default function WriteBlogs() {
         }
     }
 
+    const filteredTags = chips.filter(chip =>
+        chip.tag.toLowerCase().includes(tagInputValue.toLowerCase())
+    );
+
     return (
         <div className={"flex-1 "}>
             <main className={"max-w-screen-xl container flex h-auto flex-row gap-2 w-full mt-4 md:mt-10 "}>
@@ -114,6 +119,8 @@ export default function WriteBlogs() {
                                 className={"bg-transparent w-full text-4xl md:text-5xl lg:text-6xl border-none focus:border-none focus:outline-none resize-none"}
                                 placeholder={"Enter Title"}
                                 maxLength={150}
+                                onFocus={() => setTitleFocus(true)}
+                                onBlur={() => setTitleFocus(false)}
                             />
 
                             <div className={"flex flex-col w-full"}>
@@ -153,7 +160,8 @@ export default function WriteBlogs() {
                                 </div>
 
                                 {isSuggestion && (
-                                    <Card ref={suggestionWrapperRef} className={"w-full h-auto bg-transparent shadow-none border border-border my-2"}>
+                                    <Card ref={suggestionWrapperRef}
+                                          className={"w-full h-auto bg-transparent shadow-none border border-border my-2 animate-slidein opacity-0"}>
                                         <CardHeader className={"pb-0 flex items-center justify-between"}>
                                             <div className={"text-lg font-medium tracking-wide"}>
                                                 Suggested Tags
@@ -166,7 +174,7 @@ export default function WriteBlogs() {
                                                 variant={"bordered"}
                                                 onClick={handleSuggestionClose}
                                             >
-                                                <CloseIcon />
+                                                <CloseIcon/>
                                             </Button>
                                         </CardHeader>
 
@@ -177,14 +185,14 @@ export default function WriteBlogs() {
                                                 offset={5}
                                             >
                                                 <div className={"w-full flex flex-col"}>
-                                                    {chips.map((data) => (
+                                                    {filteredTags.map((data) => (
                                                         <Button
                                                             disableRipple
                                                             key={data.id}
                                                             isDisabled={selectedTags.includes(data.tag)}
                                                             variant={"light"}
                                                             className={"flex justify-start"}
-                                                            onClick={()=> handleChipClick(data.tag)}
+                                                            onClick={() => handleChipClick(data.tag)}
                                                         >
                                                             {data.tag}
                                                         </Button>
@@ -203,8 +211,46 @@ export default function WriteBlogs() {
                         </CardBody>
                     </Card>
                 </main>
-                <aside className={"hidden md:flex md:w-[30%]"}>
-                    Aside Section
+                <aside className={"hidden md:flex md:w-[30%] relative"}>
+                    {titleFocus && (
+                        <div className={"relative top-16 animate-slidein opacity-0 [--slidein-duration:500ms] md:px2"}>
+                            <h4 className={"text-2xl tracking-wide"}>
+                                Great Title
+                            </h4>
+
+                            <ul className={"list-disc ml-6 [&>li]:mt-2 text-sm text-muted-foreground"}>
+                                <li>
+                                    A clear and specific title helps readers quickly understand that the blog post is
+                                    relevant to their interests or needs, encouraging them to engage with the content.
+                                </li>
+
+                                <li>
+                                    The title sets the first impression of your blog post, establishing a tone that can
+                                    draw readers in and make them more likely to trust and read your content.
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+
+                    {isSuggestion && (
+                        <div className={"relative top-24 animate-slidein opacity-0 [--slidein-duration:500ms] md:px2"}>
+                            <h4 className={"text-2xl tracking-wide"}>
+                                Adding Tags
+                            </h4>
+
+                            <ul className={"list-disc ml-6 [&>li]:mt-2 text-sm text-muted-foreground"}>
+                                <li>
+                                    Tags help categorize and organize your blog posts, making it easier for readers to
+                                    find related content on your website and navigate through different topics.
+                                </li>
+
+                                <li>
+                                    Relevant tags make your blog post more discoverable to users searching for specific
+                                    topics or keywords, enhancing its visibility in search engine results.
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </aside>
             </main>
         </div>

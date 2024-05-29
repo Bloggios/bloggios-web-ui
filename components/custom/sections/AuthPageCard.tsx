@@ -29,7 +29,7 @@ const detailsList = [
 export default function AuthPageCard() {
     return (
         <div className={"auth-w-clamp flex flex-col gap-10"}>
-            <div className={"flex gap-2 items-center"}>
+            <div className={"flex gap-2 items-center animate-slidein opacity-0"}>
                 <Link href={"/"} >
                     <Image
                         src={"/assets/bg-accent_rounded.svg"}
@@ -44,7 +44,7 @@ export default function AuthPageCard() {
                 </h2>
             </div>
 
-            <div className={"flex flex-col gap-7"}>
+            <div className={"flex flex-col gap-7 animate-slidein [--slidein-delay:200ms] opacity-0"}>
                 {detailsList.map((item) => (
                     <div key={item.id} className={"w-[95%] flex flex-row gap-4 text-white"}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"

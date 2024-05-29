@@ -28,7 +28,7 @@ export const metadata : Metadata = {
 
 export default function SignupPage() {
     return (
-        <Card className={"auth-w-clamp md:w-[400px] h-fit py-2"}>
+        <Card className={"auth-w-clamp md:w-[400px] h-fit py-2 animate-slidein opacity-0"}>
             <CardHeader>
                 <CardTitle className={"text-center text-xl"}>Sign in to Bloggios</CardTitle>
                 <CardDescription className={"text-center"}>Welcome back! Please sign in to continue</CardDescription>

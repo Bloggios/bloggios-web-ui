@@ -37,7 +37,7 @@ export default function OtpPage({
     }
 
     return (
-        <div className={"flex items-center justify-center"}>
+        <div className={"flex items-center justify-center animate-slidein opacity-0"}>
             <Card className={"auth-w-clamp md:w-[400px] h-fit py-2 px-0"}>
                 <CardHeader>
                     <CardTitle className={"text-center text-xl"}>Email Verification</CardTitle>
