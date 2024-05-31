@@ -1,13 +1,19 @@
-"use client";
-
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Card, CardBody, CardHeader} from "@nextui-org/card";
-import {Button, button, Divider, Listbox, ListboxItem, ScrollShadow} from "@nextui-org/react";
-import {useEffect, useRef, useState} from "react";
 import {Chip} from "@nextui-org/chip";
-import {BiHash} from "react-icons/bi";
-import {log} from "node:util";
-import {dispatchWarningMessage} from "@/utils/DispatchFunctions";
+import {Button, Divider, ScrollShadow} from "@nextui-org/react";
 import {CloseIcon} from "@nextui-org/shared-icons";
+import "react-quill/dist/quill.snow.css";
+import '@/app/quill.css';
+import ReactQuill, {Quill, UnprivilegedEditor} from "react-quill";
+// @ts-ignore
+import ImageResize from 'quill-image-resize-module-react';
+import {blogToolbar} from "@/utils/QuillConfigurations";
+import {DeltaStatic, Sources} from "quill";
+import {QuillData} from "@/interfaces/QuillData";
+import {getHtmlContent, validateHtmlContent} from "@/utils/QuillFunctions";
+import {useDispatch} from "react-redux";
+import {Dispatch} from "redux";
 
 const chips = [
     {
@@ -40,8 +46,11 @@ const chips = [
     }
 ]
 
-export default function WriteBlogs() {
+// @ts-ignore
+window.Quill = Quill;
+Quill.register('modules/imageResize', ImageResize)
 
+const BlogWrite = () => {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [error, setError] = useState({
         tag: ''
@@ -49,27 +58,32 @@ export default function WriteBlogs() {
     const [tagInputValue, setTagInputValue] = useState("");
     const [isSuggestion, setIsSuggestion] = useState(false);
     const chipColors = ['bg-purple-700', 'bg-red-700', 'bg-amber-700', 'bg-blue-700'];
-    const suggestionWrapperRef = useRef<HTMLDivElement>(null);
-    const [titleFocus, setTitleFocus] = useState<boolean>(false);
+    const suggestionWrapperRef = useRef(null);
+    const [titleFocus, setTitleFocus] = useState(false);
+    const dispatch: Dispatch = useDispatch();
+    const [editorContent, setEditorContent] = useState<QuillData>({
+        delta: undefined,
+        html: "",
+        text: ""
+    });
+    const [addQuestionData, setAddQuestionData] = useState<any>(null);
 
-    const handleClickOutside = (event: MouseEvent) => {
-        if (suggestionWrapperRef.current && !suggestionWrapperRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: any) => {
+        // @ts-ignore
+        if (suggestionWrapperRef.current && !suggestionWrapperRef.current.contains(event.target)) {
             setIsSuggestion(false);
         }
     };
 
     useEffect(() => {
-        // Add event listener when the component mounts
         document.addEventListener('mousedown', handleClickOutside);
-
-        // Remove event listener when the component unmounts
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
 
-    const handleChipClick = (chip: any) => {
+    const handleChipClick = (chip: string) => {
         if (selectedTags.length > 4) {
             return;
         }
@@ -107,6 +121,43 @@ export default function WriteBlogs() {
     const filteredTags = chips.filter(chip =>
         chip.tag.toLowerCase().includes(tagInputValue.toLowerCase())
     );
+
+    const quillBasicModules = useMemo(() => ({
+        toolbar: blogToolbar,
+        imageResize: {
+            modules: ['Resize', 'DisplaySize']
+        }
+    }), []);
+
+    const handleEditorChange = (value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor) => {
+        setEditorContent({
+            html: editor.getHTML(),
+            delta: editor.getContents(),
+            text: editor.getText()
+        });
+    }
+
+    const handleValidate = () => {
+        // Validate Title
+        if (false) {
+            return;
+        } else {
+            const htmlContent = getHtmlContent(editorContent, dispatch);
+            let isValid = true
+            if (htmlContent) {
+                isValid = validateHtmlContent(htmlContent, dispatch, "Blog");
+            }
+            if (isValid) {
+                setAddQuestionData({
+                    // title: titleData,
+                    // tags: selectedChips,
+                    images: htmlContent?.blobs,
+                    detailsHtml: htmlContent?.finalHtml,
+                    detailsText: htmlContent?.text
+                });
+            }
+        }
+    }
 
     return (
         <div className={"flex-1 "}>
@@ -207,7 +258,13 @@ export default function WriteBlogs() {
 
                         <Divider className={"w-[70%] self-center bg-muted"}/>
 
-                        <CardBody>
+                        <CardBody className={"h-auto"}>
+
+                            <ReactQuill
+                                modules={quillBasicModules}
+                                placeholder={'Please add some details for your question'}
+                                onChange={handleEditorChange}
+                            />
                         </CardBody>
                     </Card>
                 </main>
@@ -255,4 +312,6 @@ export default function WriteBlogs() {
             </main>
         </div>
     )
-}
+};
+
+export default BlogWrite;

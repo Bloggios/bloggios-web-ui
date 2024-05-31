@@ -86,7 +86,7 @@ export default function UserNavbarDropdown() {
                 </DropdownSection>
 
                 <DropdownSection showDivider>
-                    <DropdownItem key={"profile"}>
+                    <DropdownItem onClick={()=> router.push("/profile")} key={"profile"}>
                         Profile
                     </DropdownItem>
 

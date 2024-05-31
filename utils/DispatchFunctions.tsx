@@ -46,3 +46,12 @@ export const getApiErrorMessage = (error: any): string => {
         return 'Something went wrong. Please try again later';
     }
 }
+
+export const dispatchErrorMessage = (dispatch: Dispatch, message: string) => {
+    const snackBarData = {
+        isSnackbar: true,
+        message: message,
+        snackbarType: 'Error',
+    };
+    dispatch(setSnackbar(snackBarData));
+}
