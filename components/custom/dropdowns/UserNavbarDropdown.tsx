@@ -76,7 +76,7 @@ export default function UserNavbarDropdown() {
                     {isAuthenticated ? (
                         <DropdownItem
                             key="userData"
-                            className="flex flex-col gap-2"
+                            className="flex flex-col gap-2 items-start"
                             isReadOnly
                         >
                             <p className="text-default-600">Logged in as</p>
@@ -105,7 +105,7 @@ export default function UserNavbarDropdown() {
                                 className={"mx-auto"}
                                 classNames={{
                                     svg: "w-5 h-5",
-                                    indicator: "stroke-white"
+                                    indicator: "stroke-white" 
                                 }}
                             />
                         ) : "Logout"}
