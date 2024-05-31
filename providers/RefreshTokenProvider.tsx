@@ -22,6 +22,7 @@ export function RefreshTokenProvider({children}: Readonly<{ children: React.Reac
 
         refreshToken()
             .then(async (response) => {
+                console.log(response.headers["set-cookie"])
                 if (isMounted) {
                     clearTimeout(timeoutId);
                     const authData = {...response, isAuthenticated: true};
