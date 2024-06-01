@@ -1,11 +1,18 @@
 import {cookies} from "next/headers";
-import axios from "axios";
 import {authenticatedAxios} from "@/rest/BaseAxios";
 
 export async function generateMetadata() {
     let cookies1 = cookies();
+    const profileResponse = await authenticatedAxios.get("/user-provider/profile-auth", {
+        withCredentials: true,
+        headers: {
+            'Cookie': `bloggios-cookie-mgmt-token=${cookies1.get("bloggios-cookie-mgmt-token")?.value}`
+        }
+    });
+    const response = profileResponse.data;
+    console.log(response)
     return {
-        title: 'Rohit'
+        title: response.name
     }
 }
 

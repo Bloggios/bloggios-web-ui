@@ -46,7 +46,7 @@ export const otpAuthUserIdRedirect = (authData: LoginData) => {
 export const refreshToken = () => {
     return gatewayAxios.get(REFRESH_TOKEN, {
         withCredentials: true
-    }).then((response)=> response.data);
+    }).then((response)=> response);
 }
 
 export const logoutUser = () => {

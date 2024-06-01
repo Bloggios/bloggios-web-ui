@@ -6,6 +6,8 @@ import LoaderPage from "@/components/custom/loaders/LoaderPage";
 import {refreshToken} from "@/rest/AuthProviderApplication";
 import {useDispatch} from "react-redux";
 import {clearCredentials, setCredentials} from "@/state/authSlice";
+// @ts-ignore
+import Cookies from 'js-cookie';
 
 export function RefreshTokenProvider({children}: Readonly<{ children: React.ReactNode }>) {
 
@@ -22,12 +24,13 @@ export function RefreshTokenProvider({children}: Readonly<{ children: React.Reac
 
         refreshToken()
             .then(async (response) => {
-                console.log(response.headers["set-cookie"])
                 if (isMounted) {
                     clearTimeout(timeoutId);
-                    const authData = {...response, isAuthenticated: true};
+                    const authData = {...response.data, isAuthenticated: true};
                     dispatch(setCredentials(authData));
-                    // Check profile added or not
+                    Cookies.set(process.env.NEXT_PUBLIC_COOKIE_TOKEN_NAME, response.headers[`${process.env.NEXT_PUBLIC_COOKIE_HEADER_NAME}`], {
+                        expires: 1,
+                    });
                     setIsChecking(false);
                 }
             })
@@ -45,5 +48,5 @@ export function RefreshTokenProvider({children}: Readonly<{ children: React.Reac
         };
     }, []);
 
-    return isChecking ? <LoaderPage /> : children
+    return isChecking ? <LoaderPage/> : children
 }

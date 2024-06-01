@@ -1,16 +1,7 @@
 "use client";
 
-import React, {
-    ChangeEvent,
-    ChangeEventHandler,
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useState
-} from "react";
+import React, {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {FaCheck} from "react-icons/fa";
-import {id} from "postcss-selector-parser";
 import {Button, CircularProgress, Input, Select, SelectItem, Textarea} from "@nextui-org/react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/state/store";
@@ -20,7 +11,6 @@ import {addProfile, profileTagList} from "@/rest/UserAuthProviderApplication";
 import {dispatchError} from "@/utils/DispatchFunctions";
 import {useMutation} from "@tanstack/react-query";
 import {redirect, useRouter} from "next/navigation";
-import {AxiosError} from "axios";
 import AuthenticatedAxiosInterceptor from "@/utils/AuthenticatedAxiosInterceptor";
 
 export default function ProfileInitialForm() {

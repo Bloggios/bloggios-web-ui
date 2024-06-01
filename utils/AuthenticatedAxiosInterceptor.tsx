@@ -25,6 +25,8 @@ import {authenticatedAxios, gatewayAxios} from "@/rest/BaseAxios";
 import {AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig} from "axios";
 import {REFRESH_TOKEN} from "@/constants/ApiEndpointConstants";
 import {useRouter} from "next/navigation";
+// @ts-ignore
+import Cookies from "js-cookie";
 
 const AuthenticatedAxiosInterceptor = () => {
 
@@ -54,6 +56,11 @@ const AuthenticatedAxiosInterceptor = () => {
                     const response = await gatewayAxios.get(REFRESH_TOKEN);
                     const authData = { ...response.data, isAuthenticated: true };
                     dispatch(setCredentials(authData));
+                    Cookies.set(process.env.NEXT_PUBLIC_COOKIE_TOKEN_NAME, response.headers[`${process.env.NEXT_PUBLIC_COOKIE_HEADER_NAME}`], {
+                        expires: 1,
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'Strict'
+                    });
                     prevRequest.headers['Authorization'] = `Bearer ${response.data?.accessToken}`;
                     return authenticatedAxios(prevRequest);
                 } catch (refreshEndpointError) {
