@@ -1,7 +1,5 @@
 import React from 'react';
-import {Separator} from "@/components/ui/separator";
 import {Card, CardBody, CardHeader} from "@nextui-org/card";
-import Image from "next/image";
 import {User} from "@nextui-org/user";
 import {Chip} from "@nextui-org/chip";
 import {FaRegCommentDots, FaRegHeart} from "react-icons/fa";

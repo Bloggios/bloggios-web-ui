@@ -1,5 +1,5 @@
 .ql-container .ql-editor {
-    @apply min-h-[400px] dark:bg-card max-h-[600px]
+    @apply min-h-[400px] dark:bg-transparent max-h-[600px]
 }
 
 .ql-container.ql-snow {
@@ -7,7 +7,7 @@
 }
 
 .ql-toolbar.ql-snow{
-    @apply dark:bg-card border-b-1 border-muted rounded-t-2xl
+    @apply dark:bg-transparent border-b-1 border-muted rounded-t-2xl
 }
 
 .ql-container.ql-snow > .ql-editor {
@@ -88,7 +88,7 @@
 }
 
 .ql-toolbar .ql-picker {
-    @apply text-muted-foreground bg-card;
+    @apply text-muted-foreground dark:bg-transparent;
 }
 
 .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
@@ -101,4 +101,8 @@
 
 .ql-expanded {
     @apply border-none outline-0
+}
+
+.ql-editor.ql-blank::before {
+    @apply tracking-wide text-medium font-light text-gray-300 dark:text-gray-500
 }

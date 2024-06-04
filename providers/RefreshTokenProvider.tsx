@@ -8,6 +8,7 @@ import {useDispatch} from "react-redux";
 import {clearCredentials, setCredentials} from "@/state/authSlice";
 // @ts-ignore
 import Cookies from 'js-cookie';
+import {addUserProfile} from "@/service/UserProviderApplication";
 
 export function RefreshTokenProvider({children}: Readonly<{ children: React.ReactNode }>) {
 
@@ -31,6 +32,7 @@ export function RefreshTokenProvider({children}: Readonly<{ children: React.Reac
                     Cookies.set(process.env.NEXT_PUBLIC_COOKIE_TOKEN_NAME, response.headers[`${process.env.NEXT_PUBLIC_COOKIE_HEADER_NAME}`], {
                         expires: 1,
                     });
+                    addUserProfile(dispatch);
                     setIsChecking(false);
                 }
             })

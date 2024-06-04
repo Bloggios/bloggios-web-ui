@@ -10,3 +10,5 @@ export const LOGOUT_USER = "/auth-provider/auth/logout";
 // User Provider Application
 export const PROFILE_TAGS = "/user-provider/profile-auth/profile-tags";
 export const ADD_PROFILE = "/user-provider/profile";
+export const LOGGED_IN_USER_PROFILE = "/user-provider/profile-auth";
+export const ADD_PROFILE_IMAGE = "/user-provider/profile/profile-image";

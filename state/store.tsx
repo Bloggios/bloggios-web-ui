@@ -21,16 +21,19 @@
 import {configureStore, EnhancedStore} from "@reduxjs/toolkit";
 import snackbarSlice, {SnackbarState} from "./snackbarSlice";
 import authSlice, {AuthSliceState} from "@/state/authSlice";
+import profileSlice, {ProfileState} from "@/state/profileSlice";
 
 interface RootState {
     snackbar: SnackbarState,
-    auth: AuthSliceState
+    auth: AuthSliceState,
+    profile: ProfileState,
 }
 
 const store: EnhancedStore<RootState> = configureStore({
     reducer: {
         snackbar: snackbarSlice,
         auth: authSlice,
+        profile: profileSlice,
     },
     devTools: true
 })

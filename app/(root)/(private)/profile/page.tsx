@@ -1,17 +1,17 @@
 import {cookies} from "next/headers";
 import {authenticatedAxios} from "@/rest/BaseAxios";
-import {Avatar, Divider} from "@nextui-org/react";
+import {Divider} from "@nextui-org/react";
 import {cache} from 'react';
-import {RiVerifiedBadgeFill} from "react-icons/ri";
 import Image from "next/image";
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {AiOutlineUserAdd} from "react-icons/ai";
-import {BsChatRightText, BsFillChatSquareDotsFill, BsQuestionCircle} from "react-icons/bs";
-import {FaShare} from "react-icons/fa";
-import {MdQuestionMark} from "react-icons/md";
-import {SlLike} from "react-icons/sl";
+import {BsFillChatSquareDotsFill} from "react-icons/bs";
+import {FaRegUser, FaShare} from "react-icons/fa";
 import {IoIdCardOutline} from "react-icons/io5";
+import {formatDate} from "@/utils/DateUtil";
+import {MdMailOutline} from "react-icons/md";
+import ImageUploadingAvatar from "@/components/custom/ImageUploadingAvatar";
 
 const getProfileAuth = cache(async () => {
     let cookies1 = cookies();
@@ -40,9 +40,8 @@ export default async function ProfilePage() {
             <div className={"w-full lg:w-[30%] md:w-[50%] self-center"}>
                 <Card className={"border-none shadow-none"}>
                     <CardHeader className={"flex flex-col gap-4 items-center"}>
-                        <Avatar
-                            src={profileAuth.profileImage}
-                            showFallback
+                        <ImageUploadingAvatar
+                            image={profileAuth.profileImage}
                             className="w-24 h-24 text-large"
                         />
 
@@ -107,29 +106,20 @@ export default async function ProfilePage() {
                     <CardFooter className={"flex flex-col gap-4 items-center"}>
                         <div className={"flex items-center justify-between w-full"}>
                             <div className={"flex gap-1 items-center text-muted-foreground"}>
-                                <BsQuestionCircle/>
-                                <small className={"text-sm"}>Discussions</small>
+                                <MdMailOutline />
+                                <small className={"text-sm"}>Mail</small>
                             </div>
 
-                            <small className={"text-sm font-bold"}>16</small>
+                            <small className={"text-xs font-normal max-w-[170px] overflow-hidden overflow-ellipsis"}>{profileAuth.email}</small>
                         </div>
 
                         <div className={"flex items-center justify-between w-full"}>
                             <div className={"flex gap-1 items-center text-muted-foreground"}>
-                                <SlLike/>
-                                <small className={"text-sm"}>Likes</small>
+                                <FaRegUser/>
+                                <small className={"text-sm"}>Username</small>
                             </div>
 
-                            <small className={"text-sm font-bold"}>70</small>
-                        </div>
-
-                        <div className={"flex items-center justify-between w-full"}>
-                            <div className={"flex gap-1 items-center text-muted-foreground"}>
-                                <SlLike/>
-                                <small className={"text-sm"}>Followings</small>
-                            </div>
-
-                            <small className={"text-sm font-bold"}>2</small>
+                            <small className={"text-xs font-normal max-w-[160px] overflow-hidden overflow-ellipsis"}>{profileAuth.username ? profileAuth.username : 'NA'}</small>
                         </div>
 
                         <Divider />
@@ -140,7 +130,7 @@ export default async function ProfilePage() {
                                 <small className={"text-sm"}>Joined</small>
                             </div>
 
-                            <small className={"text-sm font-bold"}>June 1, 2024</small>
+                            <small className={"text-xs font-normal max-w-[160px] overflow-hidden overflow-ellipsis"}>{formatDate(profileAuth.createdOn)}</small>
                         </div>
                     </CardFooter>
                 </Card>
