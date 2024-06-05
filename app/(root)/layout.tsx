@@ -6,6 +6,7 @@ import {NextUIProvider} from "@nextui-org/system";
 import "../globals.css";
 import {ThemeProvider} from "next-themes";
 import BloggiosToast from "@/components/custom/BloggiosToast";
+import "react-quill/dist/quill.snow.css";
 
 const poppins = Poppins({
     subsets: ["latin"],

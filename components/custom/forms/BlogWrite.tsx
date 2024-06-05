@@ -1,27 +1,32 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Card, CardBody, CardHeader} from "@nextui-org/card";
 import {Chip} from "@nextui-org/chip";
-import {Avatar, Button, Divider, ScrollShadow} from "@nextui-org/react";
-import {Button as ShadButton} from '@/components/ui/button';
+import {Button, DatePicker, Divider, Input, ScrollShadow} from "@nextui-org/react";
 import {CloseIcon} from "@nextui-org/shared-icons";
-import "react-quill/dist/quill.snow.css";
 import '@/app/quill.css';
 import ReactQuill, {Quill, UnprivilegedEditor} from "react-quill";
-// @ts-ignore
-import ImageResize from 'quill-image-resize-module-react';
-import {blogToolbar} from "@/utils/QuillConfigurations";
+import {toolbarOptions} from "@/utils/QuillConfigurations";
 import {DeltaStatic, Sources} from "quill";
 import {QuillData} from "@/interfaces/QuillData";
 import {getHtmlContent, validateHtmlContent} from "@/utils/QuillFunctions";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
-import {isTimeElement} from "@formatjs/icu-messageformat-parser";
-import Image from "next/image";
-import {Modal, ModalBody, ModalContent, ModalFooter} from "@nextui-org/modal";
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
 import Cropper from "react-easy-crop";
 import {fileToBlob, getCroppedImg} from "@/utils/ImageCropperUtil";
 import {IoMdClose} from "react-icons/io";
 import {MdEdit} from "react-icons/md";
+import {Button as ShadButton} from "@/components/ui/button";
+// @ts-ignore
+import ImageResize from 'quill-image-resize-module-react';
+import {getLocalTimeZone, now, ZonedDateTime} from "@internationalized/date";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import {CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
+import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command";
+import {cn} from "@/lib/utils";
+import {RootState} from "@/state/store";
+import {BlogAdvancedProps} from "@/interfaces/BlogAdvancedProps";
+import {BlogData} from "@/interfaces/BlogData";
 
 const chips = [
     {
@@ -52,10 +57,31 @@ const chips = [
         id: 7,
         tag: "Typescript"
     }
+];
+
+const chapters = [
+    {
+        value: "java",
+        label: "Java",
+    },
+    {
+        value: "spring_boot",
+        label: "Spring Boot",
+    },
+    {
+        value: "react",
+        label: "React.js",
+    },
+    {
+        value: "next",
+        label: "Next.js",
+    },
+    {
+        value: "kafka",
+        label: "Kafka",
+    },
 ]
 
-// @ts-ignore
-window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize)
 
 const BlogWrite = () => {
@@ -74,15 +100,40 @@ const BlogWrite = () => {
         html: "",
         text: ""
     });
-    const [addQuestionData, setAddQuestionData] = useState<any>(null);
+    const [addBlogData, setAddBlogData] = useState<BlogData>({
+        canonicalUrl: "",
+        chapterId: "",
+        delta: null,
+        htmlData: "",
+        scheduledData: 0,
+        seoTitle: "",
+        title: "",
+        topics: [],
+        images: null,
+        detailsText: ""
+    });
     const [isEditorFocused, setIsEditorFocused] = useState(false);
     const [croppedCoverImage, setCroppedCoverImage] = useState<any>(null);
     const [coverImage, setCoverImage] = useState<any>(null);
     const [isCropperModalOpen, setIsCropperModalOpen] = useState(false);
-    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [crop, setCrop] = useState({x: 0, y: 0});
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [fileType, setFileType] = useState("image/png");
+    const [isAdvancedModalOpen, setIsAdvancedModalOpen] = useState(false);
+    const [advancedProps, setAdvancedProps] = useState<BlogAdvancedProps>({
+        seoTitle: '',
+        scheduledDate: '',
+        canonicalUrl: ''
+    });
+    const [advancedPropsError, setAdvancedPropsError] = useState<BlogAdvancedProps>({
+        seoTitle: '',
+        scheduledDate: '',
+        canonicalUrl: ''
+    });
+    const [isChapterBox, setIsChapterBox] = useState(false);
+    const [chapterValue, setChapterValue] = React.useState("");
+    const {name} = useSelector((state: RootState) => state.profile)
 
     useEffect(() => {
         if (coverImage) {
@@ -91,6 +142,10 @@ const BlogWrite = () => {
             setIsCropperModalOpen(false);
         }
     }, [coverImage]);
+
+    const onAdvancedModalClose = () => {
+        setIsAdvancedModalOpen(false);
+    }
 
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
@@ -180,8 +235,9 @@ const BlogWrite = () => {
     );
 
     const quillBasicModules = useMemo(() => ({
-        toolbar: blogToolbar,
+        toolbar: toolbarOptions,
         imageResize: {
+            parchment: Quill.import('parchment'),
             modules: ['Resize', 'DisplaySize']
         }
     }), []);
@@ -205,18 +261,36 @@ const BlogWrite = () => {
                 isValid = validateHtmlContent(htmlContent, dispatch, "Blog");
             }
             if (isValid) {
-                setAddQuestionData({
+                setAddBlogData({
+                    canonicalUrl: "",
+                    chapterId: "",
+                    delta: null,
+                    htmlData: "",
+                    scheduledData: null,
+                    seoTitle: "",
+                    title: "",
+                    topics: [],
                     // title: titleData,
                     // tags: selectedChips,
                     images: htmlContent?.blobs,
-                    detailsHtml: htmlContent?.finalHtml,
-                    detailsText: htmlContent?.text
+                    detailsText: ""
                 });
             }
         }
     }
 
-    const getCoverImage = useMemo(()=> {
+    const handleAdvancedPropsInputChange = (event: React.ChangeEvent<HTMLInputElement>, property: keyof BlogAdvancedProps) => {
+        setAdvancedPropsError(prevState => ({
+            ...prevState,
+            [property]: ''
+        }));
+        setAdvancedProps(prevState => ({
+            ...prevState,
+            [property]: event.target.value
+        }))
+    }
+
+    const getCoverImage = useMemo(() => {
         if (croppedCoverImage) {
             return (
                 <div className={"relative w-full rounded-xl overflow-hidden mb-4 animate-slidein opacity-0"}>
@@ -244,7 +318,7 @@ const BlogWrite = () => {
             return (
                 <Button variant={"ghost"} size={"lg"} className={"p-0 mb-4"}>
                     <label htmlFor={"image-input"} className={"py-2 px-10"}>
-                    Cover Image
+                        Cover Image
                         <input
                             type="file"
                             accept="image/*"
@@ -256,15 +330,108 @@ const BlogWrite = () => {
                 </Button>
             )
         }
-    }, [croppedCoverImage])
+    }, [croppedCoverImage]);
+
+    const handleScheduledDate = (dateTime: ZonedDateTime) => {
+        setAdvancedPropsError(prevState => ({
+            ...prevState,
+            scheduledDate: ''
+        }));
+        const difference = dateTime.toDate().getTime() - new Date().getTime();
+        setAdvancedProps(prevState => ({
+            ...prevState,
+            scheduledDate: difference
+        }));
+    };
+
+    const seoTitleValidator = () => {
+        const seoTitle = advancedProps.seoTitle;
+        if (seoTitle.length > 0) {
+            if (seoTitle.length <= 4 || seoTitle.length >= 100) {
+                setAdvancedPropsError(prevState => ({
+                    ...prevState,
+                    seoTitle: 'SEO Title should be greater than 4 Characters and less Than 100 Characters'
+                }));
+                return false;
+            } else if (seoTitle.includes("https://") || seoTitle.includes("http://")) {
+                setAdvancedPropsError(prevState => ({
+                    ...prevState,
+                    seoTitle: 'SEO Title must not contains any type of Link'
+                }));
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const scheduledDateValidator = () => {
+        const dateDifference = advancedProps.scheduledDate;
+        if (dateDifference > 86400000) {
+            setAdvancedPropsError(prevState => ({
+                ...prevState,
+                scheduledDate: "You cannot Schedule Blog after 24 Hours or before current Time"
+            }));
+            return false;
+        }
+        return true;
+    };
+
+    const canonicalLinkValidator = () => {
+        const canonicalUrl = advancedProps.canonicalUrl;
+        if (canonicalUrl.length > 0) {
+            if (canonicalUrl.length <= 4 || canonicalUrl.length >= 1000) {
+                setAdvancedPropsError(prevState => ({
+                    ...prevState,
+                    canonicalUrl: 'Canonical Link should be greater than 4 Characters and less Than 1000 Characters'
+                }));
+                return false;
+            } else if (canonicalUrl.includes("http://")) {
+                setAdvancedPropsError(prevState => ({
+                    ...prevState,
+                    canonicalUrl: 'Bloggios does not accept unsecured protocol Links'
+                }));
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const handleAdvancedPropsSave = () => {
+        const validateSeo = seoTitleValidator();
+        const validateScheduler = scheduledDateValidator();
+        const validateCanonicalLink = canonicalLinkValidator();
+        if (!validateSeo || !validateScheduler || !validateCanonicalLink) {
+            return;
+        } else {
+            setAddBlogData(prevData => ({
+                ...prevData,
+                seoTitle: advancedProps.seoTitle,
+                scheduledDate: advancedProps.scheduledDate,
+                canonicalUrl: advancedProps.canonicalUrl
+            }));
+            onAdvancedModalClose();
+        }
+    }
 
     return (
         <>
-            <div className={"flex-1 "}>
+            <div className={"flex-1 w-full"}>
                 <main className={"max-w-screen-xl container flex h-auto flex-row gap-2 w-full mt-4 md:mt-10 "}>
 
-                    <main className={"w-full md:w-[70%]"}>
-                        <Card className={"w-full flex flex-col md:px-7 md:py-4"}>
+                    <main className={"w-full md:w-[70%] flex flex-col"}>
+
+                        <div className={"flex justify-end mb-2"}>
+                            <Button
+                                variant={"light"}
+                                size={"sm"}
+                                className={"text-sm md:text-medium"}
+                                onPress={() => setIsAdvancedModalOpen(true)}
+                            >
+                                Advanced
+                            </Button>
+                        </div>
+
+                        <Card className={"w-full flex flex-col md:px-7 md:py-4 h-auto"}>
                             <CardHeader className={"flex flex-col items-start justify-start gap-2"}>
 
                                 {getCoverImage}
@@ -339,20 +506,28 @@ const BlogWrite = () => {
                                                     className={'w-full max-h-[250px]'}
                                                     offset={5}
                                                 >
-                                                    <div className={"w-full flex flex-col"}>
-                                                        {filteredTags.map((data) => (
-                                                            <Button
-                                                                disableRipple
-                                                                key={data.id}
-                                                                isDisabled={selectedTags.includes(data.tag)}
-                                                                variant={"light"}
-                                                                className={"flex justify-start"}
-                                                                onClick={() => handleChipClick(data.tag)}
-                                                            >
-                                                                {data.tag}
-                                                            </Button>
-                                                        ))}
-                                                    </div>
+                                                    {filteredTags.length > 0 ? (
+                                                        <div className={"w-full flex flex-col"}>
+                                                            {filteredTags.map((data) => (
+                                                                <Button
+                                                                    disableRipple
+                                                                    key={data.id}
+                                                                    isDisabled={selectedTags.includes(data.tag)}
+                                                                    variant={"light"}
+                                                                    className={"flex justify-start"}
+                                                                    onClick={() => handleChipClick(data.tag)}
+                                                                >
+                                                                    {data.tag}
+                                                                </Button>
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <div className={"flex items-center justify-center"}>
+                                                            <h2 className={"text-medium font-light text-muted-foreground"}>No
+                                                                Tags found with <strong>{`'${tagInputValue}'`}</strong>
+                                                            </h2>
+                                                        </div>
+                                                    )}
                                                 </ScrollShadow>
                                             </CardBody>
                                         </Card>
@@ -362,9 +537,9 @@ const BlogWrite = () => {
 
                             <Divider className={"w-[70%] self-center bg-muted"}/>
 
-                            <CardBody className={"h-auto"}>
-
+                            <CardBody className={"h-[500px] w-full"}>
                                 <ReactQuill
+                                    theme={"snow"}
                                     modules={quillBasicModules}
                                     onChange={handleEditorChange}
                                     placeholder={"Add your Blog Content here...."}
@@ -373,7 +548,70 @@ const BlogWrite = () => {
                                 />
                             </CardBody>
                         </Card>
+
+                        <div className={"flex gap-2 mt-2 items-center justify-between flex-col md:flex-row"}>
+                            <div className={"flex flex-col gap-1"}>
+                                <label htmlFor="chapter" className={"ml-2"}>Chapter</label>
+                                <small className={"text-xs ml-2 font-light text-muted-foreground tracking-wide"}>Will
+                                    this
+                                    Blog be part of a Chapter or Series? Select the name of Chapter. (Chapter can have
+                                    10
+                                    Blogs)</small>
+                            </div>
+
+                            <Popover open={isChapterBox} onOpenChange={setIsChapterBox}>
+                                <PopoverTrigger asChild>
+                                    <ShadButton
+                                        variant="outline"
+                                        role="combobox"
+                                        aria-expanded={isChapterBox}
+                                        className="w-full md:w-[200px] min-w-[200px] justify-between overflow-hidden"
+                                    >
+                                        <span className={"overflow-hidden overflow-ellipsis self-start max-w-[80%]"}>
+                                            {chapterValue
+                                                ? chapters.find((framework) => framework.value === chapterValue)?.label
+                                                : "Select Chapter..."}
+                                        </span>
+                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
+                                    </ShadButton>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                    className="w-screen-minus [--screen-minus-value:29px] md:w-[200px] p-0 overflow-hidden overflow-ellipsis">
+                                    <Command>
+                                        <CommandInput placeholder="Search Chapter..." className="h-9"/>
+                                        <CommandList>
+                                            <CommandEmpty>No framework found.</CommandEmpty>
+                                            <CommandGroup>
+                                                {chapters.map((framework) => (
+                                                    <CommandItem
+                                                        key={framework.value}
+                                                        value={framework.value}
+                                                        onSelect={(currentValue) => {
+                                                            setChapterValue(currentValue === chapterValue ? "" : currentValue)
+                                                            setIsChapterBox(false)
+                                                        }}
+                                                    >
+                                                        {framework.label}
+                                                        <CheckIcon
+                                                            className={cn(
+                                                                "ml-auto h-4 w-4",
+                                                                chapterValue === framework.value ? "opacity-100" : "opacity-0"
+                                                            )}
+                                                        />
+                                                    </CommandItem>
+                                                ))}
+                                            </CommandGroup>
+                                        </CommandList>
+                                    </Command>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+
+                        <Button color={"primary"} className={"w-full md:w-fit self-end mt-4 px-7"}>
+                            Publish
+                        </Button>
                     </main>
+
                     <aside className={"hidden md:flex md:w-[30%] relative h-full"}>
                         {titleFocus && !isEditorFocused && (
                             <div
@@ -494,6 +732,7 @@ const BlogWrite = () => {
                 </main>
             </div>
 
+            {/* Cover Image Cropper Modal*/}
             <Modal
                 isOpen={isCropperModalOpen}
                 onClose={cropperModalOnClose}
@@ -526,13 +765,13 @@ const BlogWrite = () => {
                 }}
             >
                 <ModalContent>
-                    <ModalBody >
+                    <ModalBody>
                         <div className={"relative w-full h-[400px]"}>
                             <Cropper
                                 image={coverImage}
                                 crop={crop}
                                 zoom={zoom}
-                                aspect={16/6}
+                                aspect={16 / 6}
                                 onCropChange={setCrop}
                                 onZoomChange={setZoom}
                                 onCropComplete={onCropComplete}
@@ -543,6 +782,101 @@ const BlogWrite = () => {
                     <ModalFooter>
                         <Button onPress={showCroppedImage}>
                             Add Image
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            {/* AdvancedProps Modal*/}
+            <Modal
+                isOpen={isAdvancedModalOpen}
+                onClose={onAdvancedModalClose}
+                placement={"center"}
+                backdrop={"blur"}
+                scrollBehavior={"inside"}
+                size={"lg"}
+                classNames={{
+                    body: 'p-2 md:p-4',
+                    header: 'p-2 md:p-4'
+                }}
+            >
+                <ModalContent>
+                    <ModalHeader>
+                        <h2 className={"text-2xl tracking-wide font-bold"}>Advanced Options</h2>
+                    </ModalHeader>
+
+                    <ModalBody className={"flex flex-col gap-4"}>
+
+                        <div className={"flex flex-col gap-1"}>
+                            <label htmlFor="seo-title">
+                                SEO Title
+                            </label>
+                            <div className={"flex flex-col gap-4"}>
+                                <p className={"leading-none text-xs font-extralight text-muted-foreground tracking-wide"}>
+                                    An SEO Title is a web page&apos;s title shown in search engine results. It should be
+                                    concise, ideally 40-50 characters, and include commonly searched keywords to improve
+                                    click-through rates. Titles over 60 characters may be truncated, reducing their
+                                    effectiveness.
+                                </p>
+                                <Input
+                                    type={"text"}
+                                    placeholder={`${addBlogData.title.length > 0 ? addBlogData.title : 'Blog title'} | by ${name} | Bloggios`}
+                                    value={advancedProps.seoTitle}
+                                    onChange={(event)=> handleAdvancedPropsInputChange(event, "seoTitle")}
+                                    maxLength={150}
+                                    isInvalid={advancedPropsError.seoTitle.length > 0}
+                                    errorMessage={advancedPropsError.seoTitle}
+                                />
+                            </div>
+                        </div>
+
+                        <Divider className={"w-[80%] self-center"}/>
+                        <div className={"flex flex-col gap-2"}>
+                            <label htmlFor="schedule-blog" className={"ml-2"}>Schedule Blog</label>
+                            <div className={"flex gap-2"}>
+                                <DatePicker
+                                    aria-label={"Schedule Date"}
+                                    hideTimeZone
+                                    showMonthAndYearPickers
+                                    defaultValue={now(getLocalTimeZone())}
+                                    onChange={handleScheduledDate}
+                                    isInvalid={advancedPropsError.scheduledDate.length > 0}
+                                    errorMessage={advancedPropsError.scheduledDate}
+                                />
+                            </div>
+                        </div>
+
+                        <Divider />
+
+                        <div className={"flex flex-col gap-1"}>
+                            <label htmlFor="seo-title">
+                                Canonical Link
+                            </label>
+                            <div className={"flex flex-col gap-4"}>
+                                <p className={"leading-none text-xs font-extralight text-muted-foreground tracking-wide"}>
+                                    When an article appears on multiple web applications, search engines rely on
+                                    canonical links to identify and prioritize the original source. If your article or
+                                    Blog first appeared on another platform and you prefer search engines to index that
+                                    version instead of this one on Bloggios, you can set the canonical link here.
+                                </p>
+                                <Input
+                                    placeholder={'Add the Canonical Link'}
+                                    value={advancedProps.canonicalUrl}
+                                    onChange={(event)=> handleAdvancedPropsInputChange(event, "canonicalUrl")}
+                                    isInvalid={advancedPropsError.canonicalUrl.length > 0}
+                                    errorMessage={advancedPropsError.canonicalUrl}
+                                />
+                            </div>
+                        </div>
+                    </ModalBody>
+
+                    <ModalFooter className={"flex flex-row items-center justify-end"}>
+                        <Button size={"sm"} variant={"light"} color={"danger"} onPress={onAdvancedModalClose}>
+                            Cancel
+                        </Button>
+
+                        <Button size={"sm"} color={"primary"} onPress={handleAdvancedPropsSave}>
+                            Save
                         </Button>
                     </ModalFooter>
                 </ModalContent>

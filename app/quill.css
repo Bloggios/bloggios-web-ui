@@ -1,5 +1,5 @@
 .ql-container .ql-editor {
-    @apply min-h-[400px] dark:bg-transparent max-h-[600px]
+    @apply  dark:bg-transparent max-h-[600px]
 }
 
 .ql-container.ql-snow {
@@ -16,6 +16,17 @@
 
 .ql-container.ql-snow > .ql-editor > p {
     font-size: 16px !important;
+}
+
+.ql-align-right img {
+    text-align: right !important;
+    float: right !important;
+}
+
+.ql-align-center img {
+    text-align: center !important;
+    float: none;
+    margin: 0 auto;
 }
 
 .ql-snow.ql-toolbar button:hover .ql-fill,

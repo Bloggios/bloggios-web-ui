@@ -20,6 +20,14 @@ const config = {
       },
     },
     extend: {
+      width: {
+        'screen-minus': 'calc(100vw - var(--screen-minus-value, 100px))'
+      },
+      lineHeight: {
+        'negative': '-1',
+        'negative-two': '-2',
+        'negative-four': '-4'
+      },
       backgroundImage: {
         'auth-bg': "url(/assets/signin-bg.svg)"
       },
