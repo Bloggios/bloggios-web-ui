@@ -82,6 +82,8 @@ const chapters = [
     },
 ]
 
+// @ts-ignore
+window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize)
 
 const BlogWrite = () => {
