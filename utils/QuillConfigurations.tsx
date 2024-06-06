@@ -8,16 +8,13 @@ export const toolbarOptions = [
 ];
 
 export const blogToolbar = [
-    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-    ['blockquote', 'code-block'],
-    ['link', 'image', 'formula'],
-    [{ 'color': [] }, { 'background': [] }],
+    [{ 'header': [1, 2, 3, 4, false] }],
+    [{ 'align': [] }],
+    ['bold', 'italic'], ['underline'], ['strike'],
+    ['blockquote'], ['code-block'],
+    ['link', 'image'],
     [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
     [{ 'script': 'sub'}, { 'script': 'super' }],
     [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-    [{ 'font': [] }],
-    [{ 'align': [] }],
-
     ['clean']                                       // remove formatting button
 ];

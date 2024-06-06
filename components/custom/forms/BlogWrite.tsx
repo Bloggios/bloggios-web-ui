@@ -5,10 +5,10 @@ import {Button, DatePicker, Divider, Input, ScrollShadow} from "@nextui-org/reac
 import {CloseIcon} from "@nextui-org/shared-icons";
 import '@/app/quill.css';
 import ReactQuill, {Quill, UnprivilegedEditor} from "react-quill";
-import {toolbarOptions} from "@/utils/QuillConfigurations";
+import {blogToolbar, toolbarOptions} from "@/utils/QuillConfigurations";
 import {DeltaStatic, Sources} from "quill";
 import {QuillData} from "@/interfaces/QuillData";
-import {getHtmlContent, validateHtmlContent} from "@/utils/QuillFunctions";
+import {getHtmlContent, validateBlogData} from "@/utils/QuillFunctions";
 import {useDispatch, useSelector} from "react-redux";
 import {Dispatch} from "redux";
 import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/modal";
@@ -95,7 +95,6 @@ const BlogWrite = () => {
     const [isSuggestion, setIsSuggestion] = useState(false);
     const chipColors = ['bg-purple-700', 'bg-red-700', 'bg-amber-700', 'bg-blue-700'];
     const suggestionWrapperRef = useRef(null);
-    const [titleFocus, setTitleFocus] = useState(false);
     const dispatch: Dispatch = useDispatch();
     const [editorContent, setEditorContent] = useState<QuillData>({
         delta: undefined,
@@ -104,18 +103,12 @@ const BlogWrite = () => {
     });
     const [addBlogData, setAddBlogData] = useState<BlogData>({
         canonicalUrl: "",
-        chapterId: "",
-        delta: null,
-        htmlData: "",
-        scheduledData: 0,
+        scheduledDate: 0,
         seoTitle: "",
         title: "",
-        topics: [],
-        images: null,
-        detailsText: ""
     });
-    const [isEditorFocused, setIsEditorFocused] = useState(false);
     const [croppedCoverImage, setCroppedCoverImage] = useState<any>(null);
+    const [croppedCoverImageFile, setCroppedCoverImageFile] = useState<any>(null);
     const [coverImage, setCoverImage] = useState<any>(null);
     const [isCropperModalOpen, setIsCropperModalOpen] = useState(false);
     const [crop, setCrop] = useState({x: 0, y: 0});
@@ -135,7 +128,8 @@ const BlogWrite = () => {
     });
     const [isChapterBox, setIsChapterBox] = useState(false);
     const [chapterValue, setChapterValue] = React.useState("");
-    const {name} = useSelector((state: RootState) => state.profile)
+    const {name} = useSelector((state: RootState) => state.profile);
+    const [buttonLoader, setButtonLoader] = useState(false);
 
     useEffect(() => {
         if (coverImage) {
@@ -173,8 +167,8 @@ const BlogWrite = () => {
     const showCroppedImage = useCallback(async () => {
         try {
             const croppedImage = await getCroppedImg(coverImage, croppedAreaPixels, fileType);
-            console.log(croppedImage)
             const image = await fileToBlob(croppedImage);
+            setCroppedCoverImageFile(croppedImage);
             setCroppedCoverImage(image);
             cropperModalOnClose();
         } catch (e) {
@@ -237,11 +231,11 @@ const BlogWrite = () => {
     );
 
     const quillBasicModules = useMemo(() => ({
-        toolbar: toolbarOptions,
+        toolbar: blogToolbar,
         imageResize: {
             parchment: Quill.import('parchment'),
             modules: ['Resize', 'DisplaySize']
-        }
+        },
     }), []);
 
     const handleEditorChange = (value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor) => {
@@ -250,35 +244,6 @@ const BlogWrite = () => {
             delta: editor.getContents(),
             text: editor.getText()
         });
-    }
-
-    const handleValidate = () => {
-        // Validate Title
-        if (false) {
-            return;
-        } else {
-            const htmlContent = getHtmlContent(editorContent, dispatch);
-            let isValid = true
-            if (htmlContent) {
-                isValid = validateHtmlContent(htmlContent, dispatch, "Blog");
-            }
-            if (isValid) {
-                setAddBlogData({
-                    canonicalUrl: "",
-                    chapterId: "",
-                    delta: null,
-                    htmlData: "",
-                    scheduledData: null,
-                    seoTitle: "",
-                    title: "",
-                    topics: [],
-                    // title: titleData,
-                    // tags: selectedChips,
-                    images: htmlContent?.blobs,
-                    detailsText: ""
-                });
-            }
-        }
     }
 
     const handleAdvancedPropsInputChange = (event: React.ChangeEvent<HTMLInputElement>, property: keyof BlogAdvancedProps) => {
@@ -413,324 +378,229 @@ const BlogWrite = () => {
             }));
             onAdvancedModalClose();
         }
+    };
+
+    const handleBlogDataChange = (event: React.ChangeEvent<HTMLInputElement>, property: keyof BlogData) => {
+        setAddBlogData(prevState => ({
+            ...prevState,
+            [property]: event.target.value
+        }))
+    }
+
+    const handleValidate = () => {
+        setButtonLoader(true);
+        const htmlContent = getHtmlContent(editorContent, dispatch);
+        if (htmlContent) {
+            const finalBlogData = {
+                ...addBlogData,
+                detailsText: htmlContent.text,
+                htmlData: htmlContent.finalHtml,
+                topics: selectedTags,
+                images: htmlContent.blobs,
+                title: addBlogData.title,
+                chapterId: chapterValue,
+                coverImage: croppedCoverImageFile
+            }
+            const isValid = validateBlogData(finalBlogData, dispatch, chips);
+            if (!isValid) return;
+            console.log(finalBlogData.htmlData);
+        }
+        setButtonLoader(false);
     }
 
     return (
         <>
             <div className={"flex-1 w-full"}>
-                <main className={"max-w-screen-xl container flex h-auto flex-row gap-2 w-full mt-4 md:mt-10 "}>
+                <main className={"max-w-screen-xl container flex h-auto flex-col gap-2 w-full mt-4 md:mt-10 "}>
 
-                    <main className={"w-full md:w-[70%] flex flex-col"}>
+                    <div className={"flex justify-end mb-2"}>
+                        <Button
+                            variant={"light"}
+                            size={"sm"}
+                            className={"text-sm md:text-medium"}
+                            onPress={() => setIsAdvancedModalOpen(true)}
+                        >
+                            Advanced
+                        </Button>
+                    </div>
 
-                        <div className={"flex justify-end mb-2"}>
-                            <Button
-                                variant={"light"}
-                                size={"sm"}
-                                className={"text-sm md:text-medium"}
-                                onPress={() => setIsAdvancedModalOpen(true)}
-                            >
-                                Advanced
-                            </Button>
+                    <Card className={"w-full flex flex-col md:px-7 md:py-4 h-fit"}>
+                        <CardHeader className={"flex flex-col items-start justify-start gap-2"}>
+
+                            {getCoverImage}
+
+                            <input
+                                className={"bg-transparent w-full text-3xl md:text-5xl lg:text-6xl border-none focus:border-none focus:outline-none resize-none"}
+                                placeholder={"Enter Title"}
+                                maxLength={150}
+                                value={addBlogData.title}
+                                onChange={(event) => handleBlogDataChange(event, "title")}
+                            />
+
+                            <div className={"flex flex-col w-full mt-1"}>
+                                <div
+                                    className={"flex flex-row gap-2 items-center text-medium tracking-wide h-auto"}>
+                                    {selectedTags.map((tag, index) => {
+                                        // Determine the color based on the index
+                                        const colorIndex = index % 4;
+                                        const color = chipColors[colorIndex];
+
+                                        return (
+                                            <Chip
+                                                key={index}
+                                                variant="flat"
+                                                onClose={() => handleChipRemove(tag)}
+                                                style={{backgroundColor: color}} // Apply the color to the chip
+                                                classNames={{
+                                                    base: `${color}`,
+                                                    content: "drop-shadow text-white"
+                                                }}
+                                            >
+                                                {tag}
+                                            </Chip>
+                                        );
+                                    })}
+                                    <input
+                                        className={"font-light w-[172px] bg-transparent outline-none border-none"}
+                                        maxLength={16}
+                                        type="text"
+                                        disabled={selectedTags.length > 4}
+                                        onKeyDown={handleInputKeyDown}
+                                        placeholder={selectedTags.length === 0 ? "Add upto 4 Tags" : selectedTags.length > 4 ? '' : 'Add Tags'}
+                                        readOnly={selectedTags.length > 4}
+                                        value={tagInputValue}
+                                        onFocus={() => setIsSuggestion(true)}
+                                        onChange={(event) => setTagInputValue(event.target.value)}
+                                    />
+                                </div>
+
+                                {isSuggestion && (
+                                    <Card ref={suggestionWrapperRef}
+                                          className={"w-full h-auto bg-transparent shadow-none border border-border my-2 animate-slidein opacity-0"}>
+                                        <CardHeader className={"pb-0 flex items-center justify-between"}>
+                                            <div className={"text-lg font-medium tracking-wide"}>
+                                                Suggested Tags
+                                            </div>
+
+                                            <Button
+                                                isIconOnly={true}
+                                                size={"sm"}
+                                                className={"text-lg"}
+                                                variant={"bordered"}
+                                                onClick={handleSuggestionClose}
+                                            >
+                                                <CloseIcon/>
+                                            </Button>
+                                        </CardHeader>
+
+                                        <CardBody className={"flex flex-col gap-2 pt-1"}>
+                                            <ScrollShadow
+                                                hideScrollBar
+                                                className={'w-full max-h-[250px]'}
+                                                offset={5}
+                                            >
+                                                {filteredTags.length > 0 ? (
+                                                    <div className={"w-full flex flex-col"}>
+                                                        {filteredTags.map((data) => (
+                                                            <Button
+                                                                disableRipple
+                                                                key={data.id}
+                                                                isDisabled={selectedTags.includes(data.tag)}
+                                                                variant={"light"}
+                                                                className={"flex justify-start"}
+                                                                onClick={() => handleChipClick(data.tag)}
+                                                            >
+                                                                {data.tag}
+                                                            </Button>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className={"flex items-center justify-center"}>
+                                                        <h2 className={"text-medium font-light text-muted-foreground"}>No
+                                                            Tags found with <strong>{`'${tagInputValue}'`}</strong>
+                                                        </h2>
+                                                    </div>
+                                                )}
+                                            </ScrollShadow>
+                                        </CardBody>
+                                    </Card>
+                                )}
+                            </div>
+                        </CardHeader>
+
+                        <Divider className={"w-[70%] self-center bg-muted"}/>
+
+                        <CardBody className={"w-full"}>
+                            <ReactQuill
+                                theme={"snow"}
+                                modules={quillBasicModules}
+                                onChange={handleEditorChange}
+                                placeholder={"Add your Blog Content here...."}
+                            />
+                        </CardBody>
+                    </Card>
+
+                    <div className={"flex gap-2 mt-2 items-center justify-between flex-col md:flex-row"}>
+                        <div className={"flex flex-col gap-1"}>
+                            <label htmlFor="chapter" className={"ml-2"}>Chapter</label>
+                            <small className={"text-xs ml-2 font-light text-muted-foreground tracking-wide"}>Will
+                                this
+                                Blog be part of a Chapter or Series? Select the name of Chapter. (Chapter can have
+                                10
+                                Blogs)</small>
                         </div>
 
-                        <Card className={"w-full flex flex-col md:px-7 md:py-4 h-auto"}>
-                            <CardHeader className={"flex flex-col items-start justify-start gap-2"}>
-
-                                {getCoverImage}
-
-                                <input
-                                    className={"bg-transparent w-full text-3xl md:text-5xl lg:text-6xl border-none focus:border-none focus:outline-none resize-none"}
-                                    placeholder={"Enter Title"}
-                                    maxLength={150}
-                                    onFocus={() => setTitleFocus(true)}
-                                    onBlur={() => setTitleFocus(false)}
-                                />
-
-                                <div className={"flex flex-col w-full mt-1"}>
-                                    <div
-                                        className={"flex flex-row gap-2 items-center text-medium tracking-wide h-auto"}>
-                                        {selectedTags.map((tag, index) => {
-                                            // Determine the color based on the index
-                                            const colorIndex = index % 4;
-                                            const color = chipColors[colorIndex];
-
-                                            return (
-                                                <Chip
-                                                    key={index}
-                                                    variant="flat"
-                                                    onClose={() => handleChipRemove(tag)}
-                                                    style={{backgroundColor: color}} // Apply the color to the chip
-                                                    classNames={{
-                                                        base: `${color}`,
-                                                        content: "drop-shadow text-white"
-                                                    }}
-                                                >
-                                                    {tag}
-                                                </Chip>
-                                            );
-                                        })}
-                                        <input
-                                            className={"font-light w-[172px] bg-transparent outline-none border-none"}
-                                            maxLength={16}
-                                            type="text"
-                                            disabled={selectedTags.length > 4}
-                                            onKeyDown={handleInputKeyDown}
-                                            placeholder={selectedTags.length === 0 ? "Add upto 4 Tags" : selectedTags.length > 4 ? '' : 'Add Tags'}
-                                            readOnly={selectedTags.length > 4}
-                                            value={tagInputValue}
-                                            onFocus={() => setIsSuggestion(true)}
-                                            onChange={(event) => setTagInputValue(event.target.value)}
-                                        />
-                                    </div>
-
-                                    {isSuggestion && (
-                                        <Card ref={suggestionWrapperRef}
-                                              className={"w-full h-auto bg-transparent shadow-none border border-border my-2 animate-slidein opacity-0"}>
-                                            <CardHeader className={"pb-0 flex items-center justify-between"}>
-                                                <div className={"text-lg font-medium tracking-wide"}>
-                                                    Suggested Tags
-                                                </div>
-
-                                                <Button
-                                                    isIconOnly={true}
-                                                    size={"sm"}
-                                                    className={"text-lg"}
-                                                    variant={"bordered"}
-                                                    onClick={handleSuggestionClose}
-                                                >
-                                                    <CloseIcon/>
-                                                </Button>
-                                            </CardHeader>
-
-                                            <CardBody className={"flex flex-col gap-2 pt-1"}>
-                                                <ScrollShadow
-                                                    hideScrollBar
-                                                    className={'w-full max-h-[250px]'}
-                                                    offset={5}
-                                                >
-                                                    {filteredTags.length > 0 ? (
-                                                        <div className={"w-full flex flex-col"}>
-                                                            {filteredTags.map((data) => (
-                                                                <Button
-                                                                    disableRipple
-                                                                    key={data.id}
-                                                                    isDisabled={selectedTags.includes(data.tag)}
-                                                                    variant={"light"}
-                                                                    className={"flex justify-start"}
-                                                                    onClick={() => handleChipClick(data.tag)}
-                                                                >
-                                                                    {data.tag}
-                                                                </Button>
-                                                            ))}
-                                                        </div>
-                                                    ) : (
-                                                        <div className={"flex items-center justify-center"}>
-                                                            <h2 className={"text-medium font-light text-muted-foreground"}>No
-                                                                Tags found with <strong>{`'${tagInputValue}'`}</strong>
-                                                            </h2>
-                                                        </div>
-                                                    )}
-                                                </ScrollShadow>
-                                            </CardBody>
-                                        </Card>
-                                    )}
-                                </div>
-                            </CardHeader>
-
-                            <Divider className={"w-[70%] self-center bg-muted"}/>
-
-                            <CardBody className={"h-[500px] w-full"}>
-                                <ReactQuill
-                                    theme={"snow"}
-                                    modules={quillBasicModules}
-                                    onChange={handleEditorChange}
-                                    placeholder={"Add your Blog Content here...."}
-                                    onFocus={() => setIsEditorFocused(true)}
-                                    onBlur={() => setIsEditorFocused(false)}
-                                />
-                            </CardBody>
-                        </Card>
-
-                        <div className={"flex gap-2 mt-2 items-center justify-between flex-col md:flex-row"}>
-                            <div className={"flex flex-col gap-1"}>
-                                <label htmlFor="chapter" className={"ml-2"}>Chapter</label>
-                                <small className={"text-xs ml-2 font-light text-muted-foreground tracking-wide"}>Will
-                                    this
-                                    Blog be part of a Chapter or Series? Select the name of Chapter. (Chapter can have
-                                    10
-                                    Blogs)</small>
-                            </div>
-
-                            <Popover open={isChapterBox} onOpenChange={setIsChapterBox}>
-                                <PopoverTrigger asChild>
-                                    <ShadButton
-                                        variant="outline"
-                                        role="combobox"
-                                        aria-expanded={isChapterBox}
-                                        className="w-full md:w-[200px] min-w-[200px] justify-between overflow-hidden"
-                                    >
+                        <Popover open={isChapterBox} onOpenChange={setIsChapterBox}>
+                            <PopoverTrigger asChild>
+                                <ShadButton
+                                    variant="outline"
+                                    role="combobox"
+                                    aria-expanded={isChapterBox}
+                                    className="w-full md:w-[200px] min-w-[200px] justify-between overflow-hidden"
+                                >
                                         <span className={"overflow-hidden overflow-ellipsis self-start max-w-[80%]"}>
                                             {chapterValue
                                                 ? chapters.find((framework) => framework.value === chapterValue)?.label
                                                 : "Select Chapter..."}
                                         </span>
-                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
-                                    </ShadButton>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                    className="w-screen-minus [--screen-minus-value:29px] md:w-[200px] p-0 overflow-hidden overflow-ellipsis">
-                                    <Command>
-                                        <CommandInput placeholder="Search Chapter..." className="h-9"/>
-                                        <CommandList>
-                                            <CommandEmpty>No framework found.</CommandEmpty>
-                                            <CommandGroup>
-                                                {chapters.map((framework) => (
-                                                    <CommandItem
-                                                        key={framework.value}
-                                                        value={framework.value}
-                                                        onSelect={(currentValue) => {
-                                                            setChapterValue(currentValue === chapterValue ? "" : currentValue)
-                                                            setIsChapterBox(false)
-                                                        }}
-                                                    >
-                                                        {framework.label}
-                                                        <CheckIcon
-                                                            className={cn(
-                                                                "ml-auto h-4 w-4",
-                                                                chapterValue === framework.value ? "opacity-100" : "opacity-0"
-                                                            )}
-                                                        />
-                                                    </CommandItem>
-                                                ))}
-                                            </CommandGroup>
-                                        </CommandList>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
-                        </div>
+                                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
+                                </ShadButton>
+                            </PopoverTrigger>
+                            <PopoverContent
+                                className="w-screen-minus [--screen-minus-value:29px] md:w-[200px] p-0 overflow-hidden overflow-ellipsis">
+                                <Command>
+                                    <CommandInput placeholder="Search Chapter..." className="h-9"/>
+                                    <CommandList>
+                                        <CommandEmpty>No framework found.</CommandEmpty>
+                                        <CommandGroup>
+                                            {chapters.map((framework) => (
+                                                <CommandItem
+                                                    key={framework.value}
+                                                    value={framework.value}
+                                                    onSelect={(currentValue) => {
+                                                        setChapterValue(currentValue === chapterValue ? "" : currentValue)
+                                                        setIsChapterBox(false)
+                                                    }}
+                                                >
+                                                    {framework.label}
+                                                    <CheckIcon
+                                                        className={cn(
+                                                            "ml-auto h-4 w-4",
+                                                            chapterValue === framework.value ? "opacity-100" : "opacity-0"
+                                                        )}
+                                                    />
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </CommandList>
+                                </Command>
+                            </PopoverContent>
+                        </Popover>
+                    </div>
 
-                        <Button color={"primary"} className={"w-full md:w-fit self-end mt-4 px-7"}>
-                            Publish
-                        </Button>
-                    </main>
-
-                    <aside className={"hidden md:flex md:w-[30%] relative h-full"}>
-                        {titleFocus && !isEditorFocused && (
-                            <div
-                                className={"relative top-16 animate-slidein opacity-0 [--slidein-duration:500ms] md:px2"}>
-                                <h4 className={"text-2xl tracking-wide"}>
-                                    Great Title
-                                </h4>
-
-                                <ul className={"list-disc ml-6 [&>li]:mt-2 text-sm text-muted-foreground"}>
-                                    <li>
-                                        A clear and specific title helps readers quickly understand that the blog post
-                                        is
-                                        relevant to their interests or needs, encouraging them to engage with the
-                                        content.
-                                    </li>
-
-                                    <li>
-                                        The title sets the first impression of your blog post, establishing a tone that
-                                        can
-                                        draw readers in and make them more likely to trust and read your content.
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-
-                        {isSuggestion && !isEditorFocused && (
-                            <div
-                                className={"relative top-24 animate-slidein opacity-0 [--slidein-duration:500ms] md:px2"}>
-                                <h4 className={"text-2xl tracking-wide"}>
-                                    Adding Tags
-                                </h4>
-
-                                <ul className={"list-disc ml-6 [&>li]:mt-2 text-sm text-muted-foreground"}>
-                                    <li>
-                                        Tags help categorize and organize your blog posts, making it easier for readers
-                                        to
-                                        find related content on your website and navigate through different topics.
-                                    </li>
-
-                                    <li>
-                                        Relevant tags make your blog post more discoverable to users searching for
-                                        specific
-                                        topics or keywords, enhancing its visibility in search engine results.
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-
-                        {isEditorFocused && (
-                            <div
-                                className={"relative top-56 animate-slidein opacity-0 [--slidein-duration:500ms] md:px2"}>
-                                <h4 className={"text-2xl tracking-wide"}>
-                                    Blog Content
-                                </h4>
-
-                                <ul className={"list-disc ml-6 [&>li]:mt-2 text-sm text-muted-foreground"}>
-                                    <li>
-                                        Use Bloggios Editor powered by Quill to Write and Format your Blog
-                                    </li>
-
-                                    <li>
-                                        Can add upto 5 Images with Blog Content for better explanation of your content.
-                                    </li>
-
-                                    <li>
-                                        Dive into the heart of your expression in the content section. Unravel the
-                                        layers of
-                                        your perception, share the story behind it, and paint a vivid picture for your
-                                        readers. Let them feel the pulse of your curiosity.
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-
-                        {!titleFocus && !isSuggestion && !isEditorFocused && (
-                            <div
-                                className={"relative top-20 animate-slidein opacity-0 [--slidein-duration:500ms] md:px2"}>
-                                <h4 className={"text-2xl tracking-wide"}>
-                                    Tips for writing Blog
-                                </h4>
-
-                                <ul className={"list-disc ml-6 [&>li]:mt-2 text-sm text-muted-foreground"}>
-                                    <li>
-                                        Ensure your Blog has a cover image set to make the most of the home feed and
-                                        social
-                                        media platforms.
-                                    </li>
-
-                                    <li>
-                                        A clear and specific title helps readers quickly understand that the blog post
-                                        is
-                                        relevant to their interests or needs, encouraging them to engage with the
-                                        content.
-                                    </li>
-
-                                    <li>
-                                        The title sets the first impression of your blog post, establishing a tone that
-                                        can
-                                        draw readers in and make them more likely to trust and read your content.
-                                    </li>
-
-                                    <li>
-                                        Relevant tags make your blog post more discoverable to users searching for
-                                        specific
-                                        topics or keywords, enhancing its visibility in search engine results.
-                                    </li>
-
-                                    <li>
-                                        Dive into the heart of your expression in the content section. Unravel the
-                                        layers of
-                                        your perception, share the story behind it, and paint a vivid picture for your
-                                        readers. Let them feel the pulse of your curiosity.
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-                    </aside>
+                    <Button color={"primary"} className={"w-full md:w-fit self-end mt-4 px-7"} onPress={handleValidate}>
+                        Publish
+                    </Button>
                 </main>
             </div>
 
@@ -824,7 +694,7 @@ const BlogWrite = () => {
                                     type={"text"}
                                     placeholder={`${addBlogData.title.length > 0 ? addBlogData.title : 'Blog title'} | by ${name} | Bloggios`}
                                     value={advancedProps.seoTitle}
-                                    onChange={(event)=> handleAdvancedPropsInputChange(event, "seoTitle")}
+                                    onChange={(event) => handleAdvancedPropsInputChange(event, "seoTitle")}
                                     maxLength={150}
                                     isInvalid={advancedPropsError.seoTitle.length > 0}
                                     errorMessage={advancedPropsError.seoTitle}
@@ -848,7 +718,7 @@ const BlogWrite = () => {
                             </div>
                         </div>
 
-                        <Divider />
+                        <Divider/>
 
                         <div className={"flex flex-col gap-1"}>
                             <label htmlFor="seo-title">
@@ -864,7 +734,7 @@ const BlogWrite = () => {
                                 <Input
                                     placeholder={'Add the Canonical Link'}
                                     value={advancedProps.canonicalUrl}
-                                    onChange={(event)=> handleAdvancedPropsInputChange(event, "canonicalUrl")}
+                                    onChange={(event) => handleAdvancedPropsInputChange(event, "canonicalUrl")}
                                     isInvalid={advancedPropsError.canonicalUrl.length > 0}
                                     errorMessage={advancedPropsError.canonicalUrl}
                                 />

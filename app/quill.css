@@ -1,5 +1,5 @@
 .ql-container .ql-editor {
-    @apply  dark:bg-transparent max-h-[600px]
+    @apply  min-h-[400px] dark:bg-transparent max-h-[600px]
 }
 
 .ql-container.ql-snow {
@@ -116,4 +116,11 @@
 
 .ql-editor.ql-blank::before {
     @apply tracking-wide text-medium font-light text-gray-300 dark:text-gray-500
+}
+
+.ql-blockquote .ql-even.ql-fill.ql-stroke,
+.ql-blockquote .ql-even.ql-fill.ql-stroke,
+.ql-indent .ql-fill.ql-stroke,
+.ql-blockquote .ql-fill.ql-stroke {
+    @apply fill-muted-foreground stroke-muted-foreground
 }

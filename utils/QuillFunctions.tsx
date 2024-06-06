@@ -22,6 +22,8 @@ import {QuillData} from "@/interfaces/QuillData";
 import {dispatchErrorMessage} from "@/utils/DispatchFunctions";
 import {Dispatch} from "redux";
 import {QuillEditorHtmlBlobContent} from "@/interfaces/QuillEditorHtmlBlobContent";
+import {BlogData} from "@/interfaces/BlogData";
+import {countWords} from "@/utils/StringUtils";
 
 export const Base64URItoMultipartFile = (base64URI: any, fileName: any) => {
     const base64Content = base64URI.split(';base64,').pop();
@@ -48,7 +50,10 @@ Base64URItoMultipartFile.extractContentType = (base64URI: any) => {
 };
 
 export const getHtmlContent = (editorContent: QuillData, dispatch: Dispatch) => {
-    if (editorContent.html) {
+    if (!editorContent.html && editorContent.html.length === 0) {
+        dispatchErrorMessage(dispatch, "Please add Blog Body");
+    } else {
+        console.log("Debug")
         const delta = editorContent.delta;
         const html = editorContent.html;
         let blobs: Blob[] = [];
@@ -80,28 +85,85 @@ export const getHtmlContent = (editorContent: QuillData, dispatch: Dispatch) => 
     }
 }
 
-export const validateHtmlContent = (htmlContent: QuillEditorHtmlBlobContent, dispatch: Dispatch, validationFor: string) => {
-    if (htmlContent.text) {
-        const text = htmlContent.text;
-        const words = text.split(/\s+|\\n/);
-        const filteredWords = words.filter(word => word.trim() !== '');
-        if (filteredWords.length > 400) {
-            dispatchErrorMessage(dispatch, `${validationFor} details cannot contains more than 400 Words`);
-            return false;
-        }
+// export const validateHtmlContent = (htmlContent: QuillEditorHtmlBlobContent, dispatch: Dispatch, validationFor: string) => {
+//     if (htmlContent.text) {
+//         const text = htmlContent.text;
+//         const words = text.split(/\s+|\\n/);
+//         const filteredWords = words.filter(word => word.trim() !== '');
+//         if (filteredWords.length > 400) {
+//             dispatchErrorMessage(dispatch, `${validationFor} details cannot contains more than 400 Words`);
+//             return false;
+//         }
+//     }
+//     if (htmlContent.blobs) {
+//         const imageBlobs = htmlContent.blobs;
+//         if (htmlContent.blobs.length > 4) {
+//             dispatchErrorMessage(dispatch, `You can only add upto 5 Images in ${validationFor} Details`);
+//             return false;
+//         }
+//         for (let i = 0; i < imageBlobs.length; i++) {
+//             const blob = imageBlobs[i];
+//             if (blob.size > 800 * 1024) { // Convert KB to bytes
+//                 dispatchErrorMessage(dispatch, 'Image size should be less than 1MB');
+//                 return false;
+//             }
+//         }
+//     }
+//     return true;
+// }
+
+export const validateBlogData = (blogData: any, dispatch: Dispatch, topics: any) => {
+    // Validate Title
+    const title = blogData.title;
+    if (title.length === 0) {
+        dispatchErrorMessage(dispatch, "Please add title for your Blog");
+        return false;
+    } else if (title.length > 150) {
+        dispatchErrorMessage(dispatch, "Title must be less than 150 Characters");
+        return false;
     }
-    if (htmlContent.blobs) {
-        const imageBlobs = htmlContent.blobs;
-        if (htmlContent.blobs.length > 4) {
-            dispatchErrorMessage(dispatch, `You can only add upto 5 Images in ${validationFor} Details`);
+    const words = countWords(title);
+    if (words > 25) {
+        dispatchErrorMessage(dispatch, "Title must be less than 25 Words");
+        return false;
+    }
+
+    // Validate Details Text
+    const detailsText = blogData.detailsText;
+    if (detailsText.length === 0) {
+        dispatchErrorMessage(dispatch, "Blog must have a Valid Body");
+        return false;
+    }
+
+    // Validate Images
+    const images = blogData.images;
+    if (images && images.length > 0) {
+        if (images.length > 10) {
+            dispatchErrorMessage(dispatch, `You can only add upto 10 Images in Blog Details`);
             return false;
         }
-        for (let i = 0; i < imageBlobs.length; i++) {
-            const blob = imageBlobs[i];
-            if (blob.size > 800 * 1024) { // Convert KB to bytes
-                dispatchErrorMessage(dispatch, 'Image size should be less than 800 KB');
+        for (let i = 0; i < images.length; i++) {
+            const blob = images[i];
+            if (blob.size > 1000 * 1024) { // Convert KB to bytes
+                dispatchErrorMessage(dispatch, 'Image size should be less than 1MB');
                 return false;
             }
+        }
+    }
+
+    const selectedTopics = blogData.topics;
+    if (selectedTopics.length > 0) {
+        const missingElements = selectedTopics
+            .filter((topic: any) =>
+                !topics.some((item: any) => item.tag === topic)
+            );
+        if (missingElements.length > 0) {
+            dispatchErrorMessage(dispatch, `${missingElements.join(', ')} is not a valid Topic`);
+            return false;
+        }
+        if (selectedTopics.length > 5) {
+            dispatchErrorMessage(dispatch, 'Topics should be less than 5');
+            return false;
         }
     }
     return true;
