@@ -5,7 +5,7 @@ import {Button, DatePicker, Divider, Input, ScrollShadow} from "@nextui-org/reac
 import {CloseIcon} from "@nextui-org/shared-icons";
 import '@/app/quill.css';
 import ReactQuill, {Quill, UnprivilegedEditor} from "react-quill";
-import {blogToolbar, toolbarOptions} from "@/utils/QuillConfigurations";
+import {blogToolbar} from "@/utils/QuillConfigurations";
 import {DeltaStatic, Sources} from "quill";
 import {QuillData} from "@/interfaces/QuillData";
 import {getHtmlContent, validateBlogData} from "@/utils/QuillFunctions";
