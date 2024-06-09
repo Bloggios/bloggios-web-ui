@@ -11,8 +11,6 @@ import {
 } from "@nextui-org/react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/state/store";
-import {Separator} from "@/components/ui/separator";
-import ThemeToggleDropdown from "@/components/custom/ThemeToggleDropdown";
 import {useMutation} from "@tanstack/react-query";
 import {logoutUser} from "@/rest/AuthProviderApplication";
 import {AxiosError} from "axios";

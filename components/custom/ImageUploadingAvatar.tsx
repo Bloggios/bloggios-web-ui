@@ -3,7 +3,6 @@
 import {Avatar} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
 import ProfileImageCropperModal from "@/components/custom/cropper/ProfileImageCropperModal";
-import {FileType} from "next/dist/lib/file-exists";
 
 interface ImageUploadingAvatarProps {
     className: string;

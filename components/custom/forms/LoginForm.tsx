@@ -3,14 +3,13 @@
 import {Button, CircularProgress, Input} from "@nextui-org/react";
 import Link from "next/link";
 import {ChangeEvent, FormEvent, useState} from "react";
-import {SignupData} from "@/interfaces/SignupData";
 import {useDispatch} from "react-redux";
-import {useRouter} from "next/navigation";
-import {ACCOUNT_INACTIVE_ERROR_CODE, EMAIL_REGEX, PASSWORD_REGEX} from "@/constants/ServiceConstants";
+import {useRouter, useSearchParams} from "next/navigation";
+import {ACCOUNT_INACTIVE_ERROR_CODE, PASSWORD_REGEX} from "@/constants/ServiceConstants";
 import {LoginData} from "@/interfaces/LoginData";
 import {useMutation} from "@tanstack/react-query";
-import {loginUser, otpAuthUserIdRedirect, resendOtp, signupUser} from "@/rest/AuthProviderApplication";
-import {dispatchError, dispatchSuccessMessage, dispatchWarningMessage} from "@/utils/DispatchFunctions";
+import {loginUser, otpAuthUserIdRedirect, resendOtp} from "@/rest/AuthProviderApplication";
+import {dispatchError, dispatchWarningMessage} from "@/utils/DispatchFunctions";
 import {EyeClosedIcon, EyeOpenIcon} from "@radix-ui/react-icons";
 import {AxiosError} from "axios";
 
@@ -27,6 +26,8 @@ export default function LoginForm() {
     });
     const dispatch = useDispatch();
     const router  = useRouter();
+    const searchParams = useSearchParams()
+    const redirect = searchParams.get('redirect');
 
     const handleInputChange = (
         event: ChangeEvent<HTMLInputElement>,
@@ -66,7 +67,11 @@ export default function LoginForm() {
     const loginMutation = useMutation({
         mutationFn: () => loginUser(data),
         onSuccess: async (response) => {
-            router.push("/dashboard");
+            if (redirect) {
+                router.push(redirect);
+            } else {
+                router.push("/blogs");
+            }
         },
         onError: (error: AxiosError) => {
             // @ts-ignore

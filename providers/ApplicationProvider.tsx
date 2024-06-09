@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {Provider, useDispatch} from "react-redux";
+import {Provider} from "react-redux";
 import store from "@/state/store";
 
 export const queryClient: QueryClient = new QueryClient();

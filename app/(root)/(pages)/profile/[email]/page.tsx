@@ -12,6 +12,8 @@ import {IoIdCardOutline} from "react-icons/io5";
 import {formatDate} from "@/utils/DateUtil";
 import {MdMailOutline} from "react-icons/md";
 import ImageUploadingAvatar from "@/components/custom/ImageUploadingAvatar";
+import {EMAIL_REGEX} from "@/constants/ServiceConstants";
+import {notFound} from "next/navigation";
 
 const getProfileAuth = cache(async () => {
     let cookies1 = cookies();
@@ -31,7 +33,12 @@ export async function generateMetadata() {
     }
 }
 
-export default async function ProfilePage() {
+export default async function ProfilePage({ params }: { params: { email: string } }) {
+
+    const finalMail = params.email.replace("%40", "@");
+    if (!EMAIL_REGEX.test(finalMail)) {
+        notFound();
+    }
 
     const profileAuth = await getProfileAuth();
 

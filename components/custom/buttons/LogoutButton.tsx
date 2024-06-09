@@ -6,7 +6,7 @@ import {logoutUser} from "@/rest/AuthProviderApplication";
 import {dispatchError} from "@/utils/DispatchFunctions";
 import {AxiosError} from "axios";
 import {useDispatch} from "react-redux";
-import {redirect, useRouter} from "next/navigation";
+import {useRouter} from "next/navigation";
 
 export default function LogoutButton() {
 

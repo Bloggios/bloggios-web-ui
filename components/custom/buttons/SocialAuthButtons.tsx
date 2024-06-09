@@ -4,8 +4,6 @@ import {Button} from "@/components/ui/button";
 import {GitHubLogoIcon} from "@radix-ui/react-icons";
 import google_logo from "@/public/assets/google.svg";
 import Image from "next/image";
-import {router} from "next/client";
-import {Writable} from "node:stream";
 
 export default function SocialAuthButtons({
                                               classname = "my-4"

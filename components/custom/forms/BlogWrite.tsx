@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Card, CardBody, CardHeader} from "@nextui-org/card";
 import {Chip} from "@nextui-org/chip";
-import {Button, DatePicker, Divider, Input, ScrollShadow} from "@nextui-org/react";
+import {Button, CircularProgress, DatePicker, Divider, Input, ScrollShadow, Spinner} from "@nextui-org/react";
 import {CloseIcon} from "@nextui-org/shared-icons";
 import '@/app/quill.css';
 import ReactQuill, {Quill, UnprivilegedEditor} from "react-quill";
@@ -15,7 +15,7 @@ import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-
 import Cropper from "react-easy-crop";
 import {fileToBlob, getCroppedImg} from "@/utils/ImageCropperUtil";
 import {IoMdClose} from "react-icons/io";
-import {MdEdit} from "react-icons/md";
+import {MdEdit, MdOutlineErrorOutline} from "react-icons/md";
 import {Button as ShadButton} from "@/components/ui/button";
 // @ts-ignore
 import ImageResize from 'quill-image-resize-module-react';
@@ -27,70 +27,25 @@ import {cn} from "@/lib/utils";
 import {RootState} from "@/state/store";
 import {BlogAdvancedProps} from "@/interfaces/BlogAdvancedProps";
 import {BlogData} from "@/interfaces/BlogData";
-
-const chips = [
-    {
-        id: 1,
-        tag: "Java"
-    },
-    {
-        id: 2,
-        tag: "Python"
-    },
-    {
-        id: 3,
-        tag: "Spring Boot"
-    },
-    {
-        id: 4,
-        tag: "React Js"
-    },
-    {
-        id: 5,
-        tag: "JavaScript"
-    },
-    {
-        id: 6,
-        tag: "Flutter"
-    },
-    {
-        id: 7,
-        tag: "Typescript"
-    }
-];
-
-const chapters = [
-    {
-        value: "java",
-        label: "Java",
-    },
-    {
-        value: "spring_boot",
-        label: "Spring Boot",
-    },
-    {
-        value: "react",
-        label: "React.js",
-    },
-    {
-        value: "next",
-        label: "Next.js",
-    },
-    {
-        value: "kafka",
-        label: "Kafka",
-    },
-]
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {addBlog, fetchBlogTopics, fetchUserChapters} from "@/rest/BlogProviderApplication";
+import {BiRefresh} from "react-icons/bi";
+import AuthenticatedAxiosInterceptor from "@/utils/AuthenticatedAxiosInterceptor";
+import {Separator} from "@/components/ui/separator";
+import ChapterCreateModal from "@/components/custom/modals/ChapterCreateModal";
+import {useRouter} from "next/navigation";
+import {dispatchError, dispatchSuccessMessage} from "@/utils/DispatchFunctions";
+import {AxiosError} from "axios";
 
 // @ts-ignore
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize)
 
 const BlogWrite = () => {
+
+    const {userId} = useSelector((state: RootState) => state.auth);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [error, setError] = useState({
-        tag: ''
-    });
+    const [chips, setChips] = useState([]);
     const [tagInputValue, setTagInputValue] = useState("");
     const [isSuggestion, setIsSuggestion] = useState(false);
     const chipColors = ['bg-purple-700', 'bg-red-700', 'bg-amber-700', 'bg-blue-700'];
@@ -130,6 +85,62 @@ const BlogWrite = () => {
     const [chapterValue, setChapterValue] = React.useState("");
     const {name} = useSelector((state: RootState) => state.profile);
     const [buttonLoader, setButtonLoader] = useState(false);
+    const [chapters, setChapters] = useState<any>([]);
+    const authAxios = AuthenticatedAxiosInterceptor();
+    const [isNewChapterModalOpen, setIsNewChapterModalOpen] = useState(false);
+    const [finalPublishBlogData, setFinalPublishBlogData] = useState<any>(null);
+    const [submitModal, setSubmitModal] = useState(false);
+    const router = useRouter();
+
+    const publishBlogMutation = useMutation({
+        mutationFn: (formData: any) => addBlog(authAxios, formData),
+        onSuccess: () => {
+            dispatchSuccessMessage(dispatch, "Bloggios just hit publish on your amazing Blog post");
+            onSubmitModalClose();
+            router.push("/blog");
+        },
+        onError: (error: AxiosError) => {
+            dispatchError(dispatch, error);
+        }
+    });
+
+    const {
+        isLoading: isTopicsLoading,
+        error: isTopicsError,
+        data: topicsData,
+        isSuccess: isTopicsSuccess,
+        isError: topicsError,
+        refetch: topicsRefetch
+    } = useQuery({
+        queryKey: ['blog-topics'],
+        queryFn: fetchBlogTopics,
+        staleTime: 520000
+    });
+
+    const {
+        isLoading: isChaptersLoading,
+        error: isChaptersError,
+        data: chaptersData,
+        isSuccess: isChapterSuccess,
+        isError: chaptersError,
+        refetch: chapterRefetch
+    } = useQuery({
+        queryKey: ['chapters-data', userId],
+        queryFn: () => fetchUserChapters(authAxios),
+        staleTime: 520000
+    });
+
+    useEffect(() => {
+        if (isTopicsSuccess && topicsData) {
+            setChips(topicsData?.object);
+        }
+    }, [topicsData, isTopicsSuccess]);
+
+    useEffect(() => {
+        if (isChapterSuccess && chaptersData) {
+            setChapters(chaptersData?.object);
+        }
+    }, [chaptersData, isChapterSuccess]);
 
     useEffect(() => {
         if (coverImage) {
@@ -138,6 +149,20 @@ const BlogWrite = () => {
             setIsCropperModalOpen(false);
         }
     }, [coverImage]);
+
+    useEffect(() => {
+        if (finalPublishBlogData) {
+            setSubmitModal(true);
+        } else {
+            setSubmitModal(false);
+        }
+    }, [finalPublishBlogData]);
+
+    useEffect(() => {
+        if (selectedTags?.length >= 5 && isSuggestion) {
+            setIsSuggestion(false);
+        }
+    }, [selectedTags])
 
     const onAdvancedModalClose = () => {
         setIsAdvancedModalOpen(false);
@@ -164,12 +189,17 @@ const BlogWrite = () => {
         setIsCropperModalOpen(false);
     }
 
+    const onChapterModalClose = () => {
+        setIsNewChapterModalOpen(false);
+    }
+
     const showCroppedImage = useCallback(async () => {
         try {
             const croppedImage = await getCroppedImg(coverImage, croppedAreaPixels, fileType);
             const image = await fileToBlob(croppedImage);
             setCroppedCoverImageFile(croppedImage);
             setCroppedCoverImage(image);
+            setCoverImage(null);
             cropperModalOnClose();
         } catch (e) {
             console.error(e);
@@ -190,19 +220,13 @@ const BlogWrite = () => {
         };
     }, []);
 
-
     const handleChipClick = (chip: string) => {
         if (selectedTags.length > 4) {
             return;
         }
-        // @ts-ignore
         if (selectedTags.includes(chip)) {
-            setError(prevState => ({
-                ...prevState,
-                tag: `You have already selected ${chip} Tag`
-            }));
+            return;
         } else {
-            // @ts-ignore
             setSelectedTags([...selectedTags, chip]);
         }
         setTagInputValue('');
@@ -226,7 +250,7 @@ const BlogWrite = () => {
         }
     }
 
-    const filteredTags = chips.filter(chip =>
+    const filteredTags = chips.filter((chip: any) =>
         chip.tag.toLowerCase().includes(tagInputValue.toLowerCase())
     );
 
@@ -395,6 +419,7 @@ const BlogWrite = () => {
                 ...addBlogData,
                 detailsText: htmlContent.text,
                 htmlData: htmlContent.finalHtml,
+                delta: htmlContent.delta,
                 topics: selectedTags,
                 images: htmlContent.blobs,
                 title: addBlogData.title,
@@ -403,14 +428,127 @@ const BlogWrite = () => {
             }
             const isValid = validateBlogData(finalBlogData, dispatch, chips);
             if (!isValid) return;
-            console.log(finalBlogData.htmlData);
+            if (finalBlogData) setFinalPublishBlogData(finalBlogData)
         }
         setButtonLoader(false);
+    };
+
+    const getTopicsSuggestionData = () => {
+        if (isTopicsSuccess && !isTopicsError) {
+            return (
+                <ScrollShadow
+                    hideScrollBar
+                    className={'w-full max-h-[250px]'}
+                    offset={5}
+                >
+                    {filteredTags.length > 0 ? (
+                        <div className={"w-full flex flex-col"}>
+                            {filteredTags.map((data: any) => (
+                                <Button
+                                    disableRipple
+                                    key={data.tag}
+                                    isDisabled={selectedTags.includes(data.tag)}
+                                    variant={"light"}
+                                    className={"flex justify-start"}
+                                    onClick={() => handleChipClick(data.tag)}
+                                >
+                                    {data.tag}
+                                </Button>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className={"flex items-center justify-center"}>
+                            <h2 className={"text-medium font-light text-muted-foreground"}>No
+                                Tags found with <strong>{`'${tagInputValue}'`}</strong>
+                            </h2>
+                        </div>
+                    )}
+                </ScrollShadow>
+            )
+        } else if (isTopicsLoading && !topicsData) {
+            return (
+                <div className={"w-full flex h-[160px] items-center justify-center"}>
+                    <Spinner/>
+                </div>
+            )
+        } else if (isTopicsError) {
+            return (
+                <div className={"w-full flex h-auto items-center justify-center flex-col text-red-500 text-center"}>
+                    <MdOutlineErrorOutline className={"text-5xl"}/>
+                    <h4 className={"scroll-m-20 text-xl font-semibold tracking-tight"}>Unable to Fetch Topics.</h4>
+                    <p className={"font-extralight"}>Please try again after sometime</p>
+                    <Button isIconOnly={true} variant={"ghost"} size={"sm"} className={"mt-2"}
+                            onPress={() => topicsRefetch()}>
+                        <BiRefresh className={"text-xl"}/>
+                    </Button>
+                </div>
+            )
+        }
+    }
+
+    const getCommandEmptyData = () => {
+        if (!isChaptersLoading && !isChaptersError) {
+            return (
+                <CommandEmpty className={"flex flex-col gap-1 items-center justify-center py-4"}>
+                    No Chapters Found
+                    <Button
+                        isIconOnly={true} variant="bordered" size="sm" onClick={() => chapterRefetch()}>
+                        <BiRefresh className={"text-xl"}/>
+                    </Button>
+                </CommandEmpty>
+            )
+        } else if (isChaptersLoading) {
+            return (
+                <CommandEmpty className={"flex flex-col gap-1 items-center justify-center py-4"}>
+                    <Spinner/>
+                </CommandEmpty>
+            )
+        } else if (isChaptersError) {
+            return (
+                <CommandEmpty className={"flex flex-col gap-1 items-center justify-center py-4"}>
+                    <p className={"text-red-500"}>Error Fetching Chapters</p>
+                    <Button
+                        isIconOnly={true} variant="bordered" size="sm" onClick={() => chapterRefetch()}>
+                        <BiRefresh className={"text-xl"}/>
+                    </Button>
+                </CommandEmpty>
+            )
+        }
+    }
+
+    const onSubmitModalClose = () => {
+        setSubmitModal(false);
+    }
+
+    const handleBlogSubmit = () => {
+        if (finalPublishBlogData) {
+            const formData = new FormData();
+            if (finalPublishBlogData.images) {
+                const images = finalPublishBlogData.images;
+                for (let i = 0; i < images.length; i++) {
+                    formData.append('images', images[i]);
+                }
+            }
+            formData.append("title", finalPublishBlogData.title);
+            formData.append("detailsHtml", finalPublishBlogData.htmlData);
+            formData.append("detailsText", finalPublishBlogData.detailsText);
+            formData.append("milliseconds", finalPublishBlogData.scheduledDate);
+            formData.append("chapterId", finalPublishBlogData.chapterId);
+            formData.append("seoTitle", finalPublishBlogData.seoTitle);
+            formData.append("canonicalUrl", finalPublishBlogData.canonicalUrl);
+            if (finalPublishBlogData.topics && finalPublishBlogData.topics.length > 0) {
+                formData.append("topics", finalPublishBlogData.topics);
+            }
+            if (finalPublishBlogData.coverImage) {
+                formData.append("coverImage", finalPublishBlogData.coverImage);
+            }
+            publishBlogMutation.mutate(formData);
+        }
     }
 
     return (
         <>
-            <div className={"flex-1 w-full"}>
+            <div className={"flex-1 w-full pb-10"}>
                 <main className={"max-w-screen-xl container flex h-auto flex-col gap-2 w-full mt-4 md:mt-10 "}>
 
                     <div className={"flex justify-end mb-2"}>
@@ -439,9 +577,8 @@ const BlogWrite = () => {
 
                             <div className={"flex flex-col w-full mt-1"}>
                                 <div
-                                    className={"flex flex-row gap-2 items-center text-medium tracking-wide h-auto"}>
+                                    className={"flex flex-row gap-2 items-center text-medium tracking-wide h-auto flex-wrap"}>
                                     {selectedTags.map((tag, index) => {
-                                        // Determine the color based on the index
                                         const colorIndex = index % 4;
                                         const color = chipColors[colorIndex];
 
@@ -461,7 +598,7 @@ const BlogWrite = () => {
                                         );
                                     })}
                                     <input
-                                        className={"font-light w-[172px] bg-transparent outline-none border-none"}
+                                        className={`font-light w-[172px] bg-transparent outline-none border-none ${selectedTags.length >= 5 ? 'hidden' : ''}`}
                                         maxLength={16}
                                         type="text"
                                         disabled={selectedTags.length > 4}
@@ -494,34 +631,7 @@ const BlogWrite = () => {
                                         </CardHeader>
 
                                         <CardBody className={"flex flex-col gap-2 pt-1"}>
-                                            <ScrollShadow
-                                                hideScrollBar
-                                                className={'w-full max-h-[250px]'}
-                                                offset={5}
-                                            >
-                                                {filteredTags.length > 0 ? (
-                                                    <div className={"w-full flex flex-col"}>
-                                                        {filteredTags.map((data) => (
-                                                            <Button
-                                                                disableRipple
-                                                                key={data.id}
-                                                                isDisabled={selectedTags.includes(data.tag)}
-                                                                variant={"light"}
-                                                                className={"flex justify-start"}
-                                                                onClick={() => handleChipClick(data.tag)}
-                                                            >
-                                                                {data.tag}
-                                                            </Button>
-                                                        ))}
-                                                    </div>
-                                                ) : (
-                                                    <div className={"flex items-center justify-center"}>
-                                                        <h2 className={"text-medium font-light text-muted-foreground"}>No
-                                                            Tags found with <strong>{`'${tagInputValue}'`}</strong>
-                                                        </h2>
-                                                    </div>
-                                                )}
-                                            </ScrollShadow>
+                                            {getTopicsSuggestionData()}
                                         </CardBody>
                                     </Card>
                                 )}
@@ -560,7 +670,7 @@ const BlogWrite = () => {
                                 >
                                         <span className={"overflow-hidden overflow-ellipsis self-start max-w-[80%]"}>
                                             {chapterValue
-                                                ? chapters.find((framework) => framework.value === chapterValue)?.label
+                                                ? chapters.find((framework: any) => framework.chapterId === chapterValue)?.chapterName
                                                 : "Select Chapter..."}
                                         </span>
                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
@@ -571,26 +681,42 @@ const BlogWrite = () => {
                                 <Command>
                                     <CommandInput placeholder="Search Chapter..." className="h-9"/>
                                     <CommandList>
-                                        <CommandEmpty>No framework found.</CommandEmpty>
+                                        {getCommandEmptyData()}
                                         <CommandGroup>
-                                            {chapters.map((framework) => (
+                                            {chapters.map((framework: any) => (
                                                 <CommandItem
-                                                    key={framework.value}
-                                                    value={framework.value}
+                                                    key={framework.chapterId}
+                                                    value={framework.chapterId}
                                                     onSelect={(currentValue) => {
                                                         setChapterValue(currentValue === chapterValue ? "" : currentValue)
                                                         setIsChapterBox(false)
                                                     }}
                                                 >
-                                                    {framework.label}
+                                                    {framework.chapterName}
                                                     <CheckIcon
                                                         className={cn(
                                                             "ml-auto h-4 w-4",
-                                                            chapterValue === framework.value ? "opacity-100" : "opacity-0"
+                                                            chapterValue === framework.chapterId ? "opacity-100" : "opacity-0"
                                                         )}
                                                     />
                                                 </CommandItem>
                                             ))}
+                                        </CommandGroup>
+
+                                        <Separator/>
+
+                                        <CommandGroup>
+                                            <div className={"flex flex-row gap-1 w-full"}>
+                                                <ShadButton size={"sm"} variant={"outline"}
+                                                            onClick={() => chapterRefetch()}>
+                                                    <BiRefresh className={"text-xl"}/>
+                                                </ShadButton>
+
+                                                <ShadButton size={"sm"} variant={"outline"} className={"w-full"}
+                                                            onClick={() => setIsNewChapterModalOpen(true)}>
+                                                    New Chapter
+                                                </ShadButton>
+                                            </div>
                                         </CommandGroup>
                                     </CommandList>
                                 </Command>
@@ -599,7 +725,14 @@ const BlogWrite = () => {
                     </div>
 
                     <Button color={"primary"} className={"w-full md:w-fit self-end mt-4 px-7"} onPress={handleValidate}>
-                        Publish
+                        {buttonLoader ? (
+                            <CircularProgress
+                                classNames={{
+                                    svg: "w-7 h-7",
+                                    indicator: "stroke-white"
+                                }}
+                            />
+                        ) : "Publish"}
                     </Button>
                 </main>
             </div>
@@ -670,6 +803,26 @@ const BlogWrite = () => {
                 classNames={{
                     body: 'p-2 md:p-4',
                     header: 'p-2 md:p-4'
+                }}
+                motionProps={{
+                    variants: {
+                        enter: {
+                            y: 0,
+                            opacity: 1,
+                            transition: {
+                                duration: 0.3,
+                                ease: "easeOut",
+                            },
+                        },
+                        exit: {
+                            y: -20,
+                            opacity: 0,
+                            transition: {
+                                duration: 0.2,
+                                ease: "easeIn",
+                            },
+                        },
+                    }
                 }}
             >
                 <ModalContent>
@@ -749,6 +902,88 @@ const BlogWrite = () => {
 
                         <Button size={"sm"} color={"primary"} onPress={handleAdvancedPropsSave}>
                             Save
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            {/* New Chapter Create Modal */}
+            <ChapterCreateModal
+                isOpen={isNewChapterModalOpen}
+                onClose={onChapterModalClose}
+                refetch={chapterRefetch}
+            />
+
+            <Modal
+                isOpen={submitModal}
+                onClose={onSubmitModalClose}
+                placement={"center"}
+                backdrop={"blur"}
+                scrollBehavior={"inside"}
+                size={"lg"}
+                classNames={{
+                    body: 'p-2 md:p-4 max-h-[280px]',
+                    header: 'p-2 md:p-4'
+                }}
+                motionProps={{
+                    variants: {
+                        enter: {
+                            y: 0,
+                            opacity: 1,
+                            transition: {
+                                duration: 0.3,
+                                ease: "easeOut",
+                            },
+                        },
+                        exit: {
+                            y: -20,
+                            opacity: 0,
+                            transition: {
+                                duration: 0.2,
+                                ease: "easeIn",
+                            },
+                        },
+                    }
+                }}
+            >
+                <ModalContent>
+                    <ModalHeader>
+                        <h2 className={"text-2xl"}>Publish Blog</h2>
+                    </ModalHeader>
+
+                    <ModalBody>
+                        <p className={"text-gray-700 dark:text-gray-300 text-sm tracking-wider leading-5 font-light"}>
+                            Hi {name?.split(" ")[0]}, Before you publish your blog on the Bloggios platform, we want to
+                            remind you of our commitment to maintaining a safe and ethical online community. It is
+                            crucial
+                            that all content adheres to our guidelines, which prohibit unethical, harmful, or
+                            inappropriate
+                            material. Bloggios reserves the right to review and, if necessary, remove any content that
+                            violates these standards.
+                            <br/>
+                            We take these measures to ensure a positive experience for all users. Please take a moment
+                            to
+                            review your post for any potential issues. Thank you for your understanding and cooperation
+                            in
+                            helping us uphold the integrity of our platform.
+                        </p>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button
+                            size={"sm"}
+                            color={"danger"}
+                            variant={"light"}
+                            onPress={onSubmitModalClose}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            size={"sm"}
+                            color={"primary"}
+                            onPress={handleBlogSubmit}
+                        >
+                            Publish
                         </Button>
                     </ModalFooter>
                 </ModalContent>

@@ -21,8 +21,6 @@
 import {QuillData} from "@/interfaces/QuillData";
 import {dispatchErrorMessage} from "@/utils/DispatchFunctions";
 import {Dispatch} from "redux";
-import {QuillEditorHtmlBlobContent} from "@/interfaces/QuillEditorHtmlBlobContent";
-import {BlogData} from "@/interfaces/BlogData";
 import {countWords} from "@/utils/StringUtils";
 
 export const Base64URItoMultipartFile = (base64URI: any, fileName: any) => {
@@ -80,7 +78,8 @@ export const getHtmlContent = (editorContent: QuillData, dispatch: Dispatch) => 
         return {
             finalHtml: finalHtml,
             blobs: blobs,
-            text: editorContent.text
+            text: editorContent.text,
+            delta: editorContent.delta
         }
     }
 }

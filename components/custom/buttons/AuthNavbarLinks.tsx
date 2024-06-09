@@ -8,8 +8,7 @@ export default function AuthNavbarLinks() {
     const pathname = usePathname();
 
     const links = [
-        { href: '/dashboard', label: 'Dashboard' },
-        { href: '/blogs', label: 'Blogs' },
+        { href: '/blog', label: 'Blogs' },
         { href: '/messaging', label: 'Messaging' },
         { href: '/events', label: 'Events' },
         { href: '/discussion', label: 'Discussions' },

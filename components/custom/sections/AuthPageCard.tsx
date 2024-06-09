@@ -1,5 +1,3 @@
-import {ReactNode} from "react";
-import BloggiosLogo from "@/components/custom/BloggiosLogo";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,12 +5,12 @@ const detailsList = [
     {
         id: 1,
         label: "Effortless Knowledge Exchange",
-        description: "Enable seamless knowledge sharing through intuitive Q&A forums and interactive blogs."
+        description: "Enable seamless knowledge sharing through intuitive Q&A forums and interactive blog."
     },
     {
         id: 2,
         label: "Create and Share Content",
-        description: "Effortlessly write and publish blogs to share your knowledge and insights with the world."
+        description: "Effortlessly write and publish blog to share your knowledge and insights with the world."
     },
     {
         id: 3,

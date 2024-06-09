@@ -22,7 +22,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {clearCredentials, setCredentials} from "@/state/authSlice";
 import {RootState} from "@/state/store";
 import {authenticatedAxios, gatewayAxios} from "@/rest/BaseAxios";
-import {AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig} from "axios";
+import {AxiosError, InternalAxiosRequestConfig} from "axios";
 import {REFRESH_TOKEN} from "@/constants/ApiEndpointConstants";
 import {useRouter} from "next/navigation";
 // @ts-ignore

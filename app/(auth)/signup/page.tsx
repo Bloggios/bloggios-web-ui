@@ -8,19 +8,19 @@ import SignupForm from "@/components/custom/forms/SignupForm";
 
 export const metadata : Metadata = {
     title: "Signup",
-    description: "Signup to Bloggios, your all-in-one platform for blogs, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
-    keywords: "Bloggios, Bloggios Signup, Bloggios Account, Login, blogs, tech blogs, Q&A, posts, messaging, community, insights, questions, engagement, rohit parihar, rohit",
+    description: "Signup to Bloggios, your all-in-one platform for blog, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
+    keywords: "Bloggios, Bloggios Signup, Bloggios Account, Login, blog, tech blog, Q&A, posts, messaging, community, insights, questions, engagement, rohit parihar, rohit",
     robots: "index, follow",
     openGraph: {
         title: "Bloggios Signup",
-        description: "Signup to Bloggios, your all-in-one platform for blogs, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
+        description: "Signup to Bloggios, your all-in-one platform for blog, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
         type: "website",
         url: "https://bloggios.com/signup",
         images: "/assets/bg_accent_outer_rounded.svg",
     },
     twitter: {
         title: "Bloggios Signup",
-        description: "Signup to Bloggios, your all-in-one platform for blogs, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
+        description: "Signup to Bloggios, your all-in-one platform for blog, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
         images: "/assets/bg_accent_outer_rounded.svg",
         card: "summary_large_image"
     }

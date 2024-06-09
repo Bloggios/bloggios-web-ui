@@ -4,7 +4,6 @@ import {useLayoutEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/state/store";
 import {redirect} from "next/navigation";
-import {dispatchWarningMessage} from "@/utils/DispatchFunctions";
 
 export default function IsAuthenticated() {
 

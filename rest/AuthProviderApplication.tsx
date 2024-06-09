@@ -1,8 +1,10 @@
 import {SignupData} from "@/interfaces/SignupData";
 import {gatewayAxios} from "@/rest/BaseAxios";
 import {
-    LOGIN_USER, LOGOUT_USER,
-    OTP_AUTH_USER_ID_REDIRECT, REFRESH_TOKEN,
+    LOGIN_USER,
+    LOGOUT_USER,
+    OTP_AUTH_USER_ID_REDIRECT,
+    REFRESH_TOKEN,
     RESEND_OTP,
     SIGNUP_USER,
     VERIFY_OTP

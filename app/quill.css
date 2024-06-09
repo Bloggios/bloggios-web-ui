@@ -124,3 +124,12 @@
 .ql-blockquote .ql-fill.ql-stroke {
     @apply fill-muted-foreground stroke-muted-foreground
 }
+
+.ql-tooltip.ql-editing {
+    overflow: visible !important;
+    @apply bg-background shadow-none text-black dark:text-white rounded-xl
+}
+
+.ql-tooltip.ql-editing input {
+    @apply bg-transparent rounded-xl
+}
