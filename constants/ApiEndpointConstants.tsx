@@ -18,3 +18,5 @@ export const FETCH_BLOG_TOPICS = "/blog-provider/topics";
 export const FETCH_USER_CHAPTERS = "/blog-provider/chapter";
 export const ADD_NEW_CHAPTER = "/blog-provider/chapter";
 export const ADD_BLOG = "/blog-provider/blogs";
+export const BLOGS_LIST = "/blog-provider/unauth/blog/list";
+export const BLOG_DETAILS = "/blog-provider/unauth/blog";

@@ -20,6 +20,7 @@ import {useRouter} from "next/navigation";
 export default function UserNavbarDropdown() {
 
     const {isAuthenticated, email} = useSelector((state: RootState) => state.auth);
+    const {profileImage} = useSelector((state: RootState) => state.profile);
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -46,7 +47,7 @@ export default function UserNavbarDropdown() {
             <DropdownTrigger>
                 <Avatar
                     isBordered
-                    src={undefined}
+                    src={profileImage ? profileImage : ""}
                     showFallback
                     size={"sm"}
                 />

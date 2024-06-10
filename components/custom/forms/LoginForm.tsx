@@ -12,6 +12,7 @@ import {loginUser, otpAuthUserIdRedirect, resendOtp} from "@/rest/AuthProviderAp
 import {dispatchError, dispatchWarningMessage} from "@/utils/DispatchFunctions";
 import {EyeClosedIcon, EyeOpenIcon} from "@radix-ui/react-icons";
 import {AxiosError} from "axios";
+import {BLOG_PAGE} from "@/constants/UiPathConstants";
 
 export default function LoginForm() {
 
@@ -70,7 +71,7 @@ export default function LoginForm() {
             if (redirect) {
                 router.push(redirect);
             } else {
-                router.push("/blogs");
+                router.push(BLOG_PAGE);
             }
         },
         onError: (error: AxiosError) => {

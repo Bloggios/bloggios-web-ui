@@ -521,6 +521,7 @@ const BlogWrite = () => {
     }
 
     const handleBlogSubmit = () => {
+        console.log(finalPublishBlogData.scheduledDate)
         if (finalPublishBlogData) {
             const formData = new FormData();
             if (finalPublishBlogData.images) {
@@ -532,12 +533,14 @@ const BlogWrite = () => {
             formData.append("title", finalPublishBlogData.title);
             formData.append("detailsHtml", finalPublishBlogData.htmlData);
             formData.append("detailsText", finalPublishBlogData.detailsText);
-            formData.append("milliseconds", finalPublishBlogData.scheduledDate);
             formData.append("chapterId", finalPublishBlogData.chapterId);
             formData.append("seoTitle", finalPublishBlogData.seoTitle);
             formData.append("canonicalUrl", finalPublishBlogData.canonicalUrl);
             if (finalPublishBlogData.topics && finalPublishBlogData.topics.length > 0) {
                 formData.append("topics", finalPublishBlogData.topics);
+            }
+            if (finalPublishBlogData.scheduledDate && finalPublishBlogData.scheduledDate > 120000) {
+                formData.append("milliseconds", finalPublishBlogData.scheduledDate);
             }
             if (finalPublishBlogData.coverImage) {
                 formData.append("coverImage", finalPublishBlogData.coverImage);
