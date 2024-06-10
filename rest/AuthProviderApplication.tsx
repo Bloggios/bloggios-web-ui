@@ -4,7 +4,7 @@ import {
     LOGIN_USER,
     LOGOUT_USER,
     OTP_AUTH_USER_ID_REDIRECT,
-    REFRESH_TOKEN,
+    REFRESH_TOKEN, REFRESH_TOKEN_SOCIAL,
     RESEND_OTP,
     SIGNUP_USER,
     VERIFY_OTP
@@ -55,4 +55,12 @@ export const logoutUser = () => {
     return gatewayAxios.get(LOGOUT_USER, {
         withCredentials: true
     }).then(response=> response.data);
+}
+
+export const refreshTokenSocial = (token: string) => {
+    return gatewayAxios.get(REFRESH_TOKEN_SOCIAL, {
+        params: {
+            token: token
+        }
+    }).then((response)=> response.data);
 }

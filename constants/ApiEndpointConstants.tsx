@@ -6,6 +6,7 @@ export const LOGIN_USER = "/auth-provider/auth/token";
 export const OTP_AUTH_USER_ID_REDIRECT = "/auth-provider/auth/otp-userId";
 export const REFRESH_TOKEN = "/auth-provider/auth/refresh-token";
 export const LOGOUT_USER = "/auth-provider/auth/logout";
+export const REFRESH_TOKEN_SOCIAL = "/auth-provider/auth/refresh-token-social";
 
 // User Provider Application
 export const PROFILE_TAGS = "/user-provider/profile-auth/profile-tags";
