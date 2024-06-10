@@ -18,7 +18,6 @@ export default function SocialAuthButtons({
             <Button variant={"outline"} className={"flex-1 flex items-center gap-2"}>
                 <GitHubLogoIcon/> Github
             </Button>
-
             <Link href={GOOGLE_AUTH_URL}>
                 <Button variant={"outline"} className={"flex-1 flex items-center gap-2"}>
                     <Image src={google_logo} alt={"google"} width={18} height={18}/> Google
