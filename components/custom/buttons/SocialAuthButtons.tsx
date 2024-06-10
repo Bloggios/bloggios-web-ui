@@ -11,7 +11,7 @@ export default function SocialAuthButtons({
                                           }) {
 
     const OAUTH2_REDIRECT_URI = `${window.location.origin}/oauth2/redirect`
-    const GOOGLE_AUTH_URL = "https://auth.bloggios.in" + '/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
+    const GOOGLE_AUTH_URL = "http://localhost:7001" + '/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
 
     return (
         <div className={`flex items-center justify-between space-x-2 ${classname}`}>

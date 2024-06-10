@@ -38,7 +38,7 @@ export default function BloggiosToast() {
             case "notification":
                 toast(message, {
                     action: path && {
-                        chapterName: 'View',
+                        label: 'View',
                         onClick: handleSnackbarAction
                     }
                 });
