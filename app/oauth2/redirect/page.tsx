@@ -1,8 +1,7 @@
 "use client";
 
-import {useRouter, useSearchParams} from "next/navigation";
+import {redirect, useRouter, useSearchParams} from "next/navigation";
 import {useEffect} from "react";
-import axios from "axios";
 import {refreshTokenSocial} from "@/rest/AuthProviderApplication";
 
 const OAuthRedirectHandler = () => {
@@ -26,6 +25,7 @@ const OAuthRedirectHandler = () => {
             refreshTokenSocial(token)
                 .then(response => {
                     window.location.reload();
+                    redirect("/")
                 })
         } else {
             router.push('/login');

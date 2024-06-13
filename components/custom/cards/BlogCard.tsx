@@ -34,7 +34,7 @@ const BlogCard = React.forwardRef<HTMLDivElement, BlogCardProps>((props: BlogCar
                         />
                     </CardHeader>
                 )}
-                <CardBody className={"flex flex-col justify-start items-start md:px-7 md:py-4"}
+                <CardBody className={"flex flex-col justify-start items-start md:px-7 md:py-4 cursor-pointer"}
                           onClick={() => router.push(`/blog/${props.data.blogId}`)}>
                     <User
                         name={props.data.name}

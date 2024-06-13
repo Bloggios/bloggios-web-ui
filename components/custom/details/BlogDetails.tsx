@@ -9,21 +9,21 @@ import Image from "next/image";
 
 const BlogDetails = ({data}: { data: any }) => {
 
-    console.log(data);
-
     return (
         <div className={"mt-2 md:mt-6 flex flex-col gap-10"}>
 
-            <div className={"w-full"}>
-                <Image
-                    src={data.coverImage}
-                    alt={data.title}
-                    className={"h-auto w-full object-cover rounded-xl"}
-                    width={0}
-                    height={0}
-                    sizes={"100vw"}
-                />
-            </div>
+            {data.coverImage && (
+                <div className={"w-full"}>
+                    <Image
+                        src={data.coverImage}
+                        alt={data.title}
+                        className={"h-auto w-full object-cover rounded-xl"}
+                        width={0}
+                        height={0}
+                        sizes={"100vw"}
+                    />
+                </div>
+            )}
 
             <div className={"flex flex-col space-y-2"}>
                 <h1 className={"scroll-m-20 text-4xl font-medium tracking-wide lg:text-5xl"}>

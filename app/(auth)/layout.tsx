@@ -9,6 +9,7 @@ import {ApplicationProvider} from "@/providers/ApplicationProvider";
 import BloggiosToast from "@/components/custom/BloggiosToast";
 import {RefreshTokenProvider} from "@/providers/RefreshTokenProvider";
 import IsAuthenticated from "@/components/functional/IsAuthenticated";
+import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -39,10 +40,11 @@ export default function RootLayout({
             className={`${poppins.variable} relative flex flex-col min-h-screen bg-auth-bg bg-cover bg-no-repeat bg-fixed`}>
         <ApplicationProvider>
             <BloggiosToast/>
-            <NextUIProvider className={"flex flex-col min-h-screen justify-between relative"}>
+                <NextUIProvider className={"flex flex-col min-h-screen justify-between relative"}>
+            <GoogleOAuthProvider clientId={"50987300482-vlm1c14cr19nush8ib2hhv5deoi4ge08.apps.googleusercontent.com"}>
                 <RefreshTokenProvider>
                     <main className={"flex flex-row w-full mt-10 md:mt-20 lg:space-x-20"}>
-                        <IsAuthenticated />
+                        <IsAuthenticated/>
                         <div className={"flex-1 hidden lg:flex justify-end"}>
                             <AuthPageCard/>
                         </div>
@@ -65,6 +67,7 @@ export default function RootLayout({
                         </div>
                     </footer>
                 </RefreshTokenProvider>
+            </GoogleOAuthProvider>
             </NextUIProvider>
         </ApplicationProvider>
         </body>

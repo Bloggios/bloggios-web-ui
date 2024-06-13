@@ -1,10 +1,12 @@
 import {SignupData} from "@/interfaces/SignupData";
 import {gatewayAxios} from "@/rest/BaseAxios";
 import {
+    GOOGLE_LOGIN,
     LOGIN_USER,
     LOGOUT_USER,
     OTP_AUTH_USER_ID_REDIRECT,
-    REFRESH_TOKEN, REFRESH_TOKEN_SOCIAL,
+    REFRESH_TOKEN,
+    REFRESH_TOKEN_SOCIAL,
     RESEND_OTP,
     SIGNUP_USER,
     VERIFY_OTP
@@ -61,6 +63,15 @@ export const refreshTokenSocial = (token: string) => {
     return gatewayAxios.get(REFRESH_TOKEN_SOCIAL, {
         params: {
             token: token
+        }
+    }).then((response)=> response.data);
+}
+
+export const loginGoogle = (token: string, secret: string) => {
+    return gatewayAxios.get(GOOGLE_LOGIN, {
+        headers: {
+            token: token,
+            secret: secret
         }
     }).then((response)=> response.data);
 }

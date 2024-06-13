@@ -16,6 +16,7 @@
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
+    "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-query": "^5.22.2",
     "@tanstack/react-query-devtools": "^5.24.0",
@@ -45,7 +46,8 @@
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "vaul": "^0.9.1"
   },
   "devDependencies": {
     "@types/node": "^20",

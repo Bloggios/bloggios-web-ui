@@ -27,7 +27,7 @@ export default function LoginForm() {
     });
     const dispatch = useDispatch();
     const router  = useRouter();
-    const searchParams = useSearchParams()
+    const searchParams = useSearchParams();
     const redirect = searchParams.get('redirect');
 
     const handleInputChange = (
