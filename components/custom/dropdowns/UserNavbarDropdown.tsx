@@ -16,6 +16,7 @@ import {logoutUser} from "@/rest/AuthProviderApplication";
 import {AxiosError} from "axios";
 import {dispatchError} from "@/utils/DispatchFunctions";
 import {useRouter} from "next/navigation";
+import {googleLogout} from "@react-oauth/google";
 
 export default function UserNavbarDropdown() {
 

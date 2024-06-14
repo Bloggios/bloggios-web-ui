@@ -7,6 +7,8 @@ import "../globals.css";
 import {ThemeProvider} from "next-themes";
 import BloggiosToast from "@/components/custom/BloggiosToast";
 import "react-quill/dist/quill.snow.css";
+import RedirectProfileNotAdded from "@/components/functional/RedirectProfileNotAdded";
+import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -35,12 +37,15 @@ export default function AuthLayout({
             disableTransitionOnChange
         >
             <NextUIProvider>
-                    <ApplicationProvider>
+                <ApplicationProvider>
+                    <GoogleOAuthProvider clientId={"50987300482-vlm1c14cr19nush8ib2hhv5deoi4ge08.apps.googleusercontent.com"}>
                         <RefreshTokenProvider>
                             <BloggiosToast/>
+                            <RedirectProfileNotAdded/>
                             {children}
                         </RefreshTokenProvider>
-                    </ApplicationProvider>
+                    </GoogleOAuthProvider>
+                </ApplicationProvider>
             </NextUIProvider>
         </ThemeProvider>
         </body>

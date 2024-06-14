@@ -39,36 +39,36 @@ export default function RootLayout({
         <body
             className={`${poppins.variable} relative flex flex-col min-h-screen bg-auth-bg bg-cover bg-no-repeat bg-fixed`}>
         <ApplicationProvider>
-            <BloggiosToast/>
-                <NextUIProvider className={"flex flex-col min-h-screen justify-between relative"}>
             <GoogleOAuthProvider clientId={"50987300482-vlm1c14cr19nush8ib2hhv5deoi4ge08.apps.googleusercontent.com"}>
-                <RefreshTokenProvider>
-                    <main className={"flex flex-row w-full mt-10 md:mt-20 lg:space-x-20"}>
-                        <IsAuthenticated/>
-                        <div className={"flex-1 hidden lg:flex justify-end"}>
-                            <AuthPageCard/>
-                        </div>
+                <BloggiosToast/>
+                <NextUIProvider className={"flex flex-col min-h-screen justify-between relative"}>
+                    <RefreshTokenProvider>
+                        <main className={"flex flex-row w-full mt-10 md:mt-20 lg:space-x-20"}>
+                            <IsAuthenticated/>
+                            <div className={"flex-1 hidden lg:flex justify-end"}>
+                                <AuthPageCard/>
+                            </div>
 
-                        <div className={"flex-1 flex lg:justify-start justify-center"}>
-                            {children}
-                        </div>
-                    </main>
+                            <div className={"flex-1 flex lg:justify-start justify-center"}>
+                                {children}
+                            </div>
+                        </main>
 
-                    <footer
-                        className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 my-4 text-white text-muted-foreground text-xs font-extralight"}>
-                        <Link href={"/"} className={"hover:underline"}>© Bloggios 2024</Link>
+                        <footer
+                            className={"flex self-center items-center justify-between w-[95%] md:w-[650px] gap-4 my-4 text-white text-muted-foreground text-xs font-extralight"}>
+                            <Link href={"/"} className={"hover:underline"}>© Bloggios 2024</Link>
 
-                        <div className={"flex gap-4"}>
-                            <Link href={"/"} className={"hover:underline"}>
-                                Privacy
-                            </Link>
+                            <div className={"flex gap-4"}>
+                                <Link href={"/"} className={"hover:underline"}>
+                                    Privacy
+                                </Link>
 
-                            <Link className={"hover:underline"} href={"/"}>Terms and Conditions</Link>
-                        </div>
-                    </footer>
-                </RefreshTokenProvider>
+                                <Link className={"hover:underline"} href={"/"}>Terms and Conditions</Link>
+                            </div>
+                        </footer>
+                    </RefreshTokenProvider>
+                </NextUIProvider>
             </GoogleOAuthProvider>
-            </NextUIProvider>
         </ApplicationProvider>
         </body>
         </html>

@@ -12,6 +12,7 @@ import {
     VERIFY_OTP
 } from "@/constants/ApiEndpointConstants";
 import {LoginData} from "@/interfaces/LoginData";
+import {googleLogout} from "@react-oauth/google";
 
 export const signupUser = (signupData: SignupData) => {
     return gatewayAxios.post(SIGNUP_USER, signupData)
@@ -54,6 +55,7 @@ export const refreshToken = () => {
 }
 
 export const logoutUser = () => {
+    googleLogout();
     return gatewayAxios.get(LOGOUT_USER, {
         withCredentials: true
     }).then(response=> response.data);
@@ -67,11 +69,7 @@ export const refreshTokenSocial = (token: string) => {
     }).then((response)=> response.data);
 }
 
-export const loginGoogle = (token: string, secret: string) => {
-    return gatewayAxios.get(GOOGLE_LOGIN, {
-        headers: {
-            token: token,
-            secret: secret
-        }
-    }).then((response)=> response.data);
+export const loginGoogle = (tokenResponse) => {
+    return gatewayAxios.post(GOOGLE_LOGIN, tokenResponse)
+        .then((response)=> response);
 }

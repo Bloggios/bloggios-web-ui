@@ -12,7 +12,7 @@ export default function IsAuthenticated() {
 
     useLayoutEffect(() => {
         if (isAuthenticated && !authorities?.includes('ROLE_DUMMY')) {
-            redirect("/dashboard");
+            redirect("/");
         } else if (isAuthenticated && authorities?.includes('ROLE_DUMMY')) {
             redirect("/profile-addition-initial");
         }
