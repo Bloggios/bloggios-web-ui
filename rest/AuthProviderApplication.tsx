@@ -69,7 +69,7 @@ export const refreshTokenSocial = (token: string) => {
     }).then((response)=> response.data);
 }
 
-export const loginGoogle = (tokenResponse) => {
+export const loginGoogle = (tokenResponse: any) => {
     return gatewayAxios.post(GOOGLE_LOGIN, tokenResponse)
         .then((response)=> response);
 }
