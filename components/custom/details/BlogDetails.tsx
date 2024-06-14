@@ -36,13 +36,13 @@ const BlogDetails = ({data}: { data: any }) => {
 
             <BlogDetailsUserInfo data={data}/>
 
-            <BlogActionButton/>
+            <BlogActionButton data={data}/>
 
             <div dangerouslySetInnerHTML={{__html: data.detailsHtml}}/>
 
             <BlogTopics className={"pt-10"} topics={data.topics}/>
 
-            <BlogActionButton isDividerShown={false}/>
+            <BlogActionButton data={data} isDividerShown={false}/>
 
             <div className={"flex flex-col mt-10 md:mt-20 gap-4"}>
                 <div className={"flex items-center justify-between"}>
