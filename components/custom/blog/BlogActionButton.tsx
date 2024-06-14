@@ -19,41 +19,31 @@ import {FaXTwitter} from "react-icons/fa6";
 import {FaInstagram, FaLinkedin} from "react-icons/fa";
 import BlogCommentDrawer from "@/components/custom/drawers/BlogCommentDrawer";
 import BlogCommentMobileDrawer from "@/components/custom/drawers/BlogCommentMobileDrawer";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
-const BlogActionButton = ({data, isDividerShown = true}: {data: any, isDividerShown?: boolean }) => {
+const BlogActionButton = ({data, isDividerShown = true}: { data: any, isDividerShown?: boolean }) => {
+
+    const breakPoint = useMediaQuery(640);
+
     return (
         <div className={"flex flex-col space-y-2"}>
             {isDividerShown && <Divider className={"w-[90%] self-center"}/>}
             <div className={"flex items-center justify-between md:px-6"}>
                 <div className={"flex items-center gap-2"}>
-                    <div className={"flex items-center"}>
+                    <div className={"flex items-center gap-1"}>
                         <small className={"text-sm"}>
                             10
                         </small>
-                        <Button
-                            isIconOnly={true}
-                            variant={"light"}
-                            size={"sm"}
-                            className={"text-xl"}
-                        >
-                            <AiOutlineLike/>
-                        </Button>
+                        <AiOutlineLike className={"text-xl"}/>
                     </div>
 
                     <Divider orientation={"vertical"} className={"h-6"}/>
 
-                    <div className={"flex items-center"}>
+                    <div className={"flex items-center gap-1"}>
                         <small className={"text-sm"}>
                             10
                         </small>
-                        <BlogCommentDrawer data={data}/>
-                    </div>
-
-                    <div className={"flex items-center"}>
-                        <small className={"text-sm"}>
-                            10
-                        </small>
-                        <BlogCommentMobileDrawer/>
+                        {breakPoint ? <BlogCommentMobileDrawer/> : <BlogCommentDrawer data={data}/>}
                     </div>
                 </div>
 
@@ -70,7 +60,8 @@ const BlogActionButton = ({data, isDividerShown = true}: {data: any, isDividerSh
                     <Dropdown
                         showArrow
                         radius="sm"
-                        backdrop={"blur"}
+                        backdrop={"opaque"}
+                        placement={"left"}
                         classNames={{
                             base: "before:bg-default-200", // change arrow background
                             content: "p-0 border-small border-divider bg-background",
@@ -109,7 +100,7 @@ const BlogActionButton = ({data, isDividerShown = true}: {data: any, isDividerSh
                             <DropdownSection showDivider>
                                 <DropdownItem>
                                     <div className={"flex items-center gap-2"}>
-                                        <IoIosLink />
+                                        <IoIosLink/>
                                         <span>Copy Link</span>
                                     </div>
                                 </DropdownItem>
@@ -118,21 +109,21 @@ const BlogActionButton = ({data, isDividerShown = true}: {data: any, isDividerSh
                             <DropdownSection className={"w-full"}>
                                 <DropdownItem>
                                     <div className={"flex items-center gap-2"}>
-                                        <FaLinkedin />
+                                        <FaLinkedin/>
                                         <span>Share on LinkedIn</span>
                                     </div>
                                 </DropdownItem>
 
                                 <DropdownItem>
                                     <div className={"flex items-center gap-2"}>
-                                        <FaXTwitter />
+                                        <FaXTwitter/>
                                         <span>Share on X</span>
                                     </div>
                                 </DropdownItem>
 
                                 <DropdownItem>
                                     <div className={"flex items-center gap-2"}>
-                                        <FaInstagram />
+                                        <FaInstagram/>
                                         <span>Share on Instagram</span>
                                     </div>
                                 </DropdownItem>

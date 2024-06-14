@@ -9,19 +9,26 @@ import {
     DrawerTitle,
     DrawerTrigger
 } from "@/components/ui/drawer";
+import {HiOutlineChatBubbleOvalLeftEllipsis} from "react-icons/hi2";
 import {Button} from "@/components/ui/button";
+import BlogCommentField from "@/components/custom/blog/BlogCommentField";
 
 const BlogCommentMobileDrawer = () => {
     return (
         <Drawer>
             <DrawerTrigger asChild>
-                <Button variant="outline">Open Drawer</Button>
+                <HiOutlineChatBubbleOvalLeftEllipsis className={"text-xl"}/>
             </DrawerTrigger>
-            <DrawerContent>
-                <div className="mx-auto w-full max-w-sm">
+            <DrawerContent className={"outline-none w-full"}>
+                <div className="mx-auto w-full">
                     <DrawerHeader>
-                        <DrawerTitle>Move Goal</DrawerTitle>
-                        <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+                        <DrawerTitle className={"text-xl"}>
+                            Discussions
+                        </DrawerTitle>
+
+                        <DrawerDescription>
+                            <BlogCommentField />
+                        </DrawerDescription>
                     </DrawerHeader>
                     <div>
                         Drawer
@@ -29,7 +36,6 @@ const BlogCommentMobileDrawer = () => {
                     <DrawerFooter>
                         <Button>Submit</Button>
                         <DrawerClose asChild>
-                            <Button variant="outline">Cancel</Button>
                         </DrawerClose>
                     </DrawerFooter>
                 </div>
