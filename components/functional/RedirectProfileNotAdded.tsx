@@ -9,7 +9,7 @@ const RedirectProfileNotAdded: React.FC = () => {
 
     const {isAuthenticated, authorities} = useSelector((state: RootState) => state.auth);
 
-    useEffect(()=> {
+    useLayoutEffect(()=> {
         if (isAuthenticated && authorities?.includes('ROLE_DUMMY')) {
             redirect("/profile-addition-initial");
         }

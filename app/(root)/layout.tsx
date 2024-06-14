@@ -41,7 +41,6 @@ export default function AuthLayout({
                     <GoogleOAuthProvider clientId={"50987300482-vlm1c14cr19nush8ib2hhv5deoi4ge08.apps.googleusercontent.com"}>
                         <RefreshTokenProvider>
                             <BloggiosToast/>
-                            <RedirectProfileNotAdded/>
                             {children}
                         </RefreshTokenProvider>
                     </GoogleOAuthProvider>

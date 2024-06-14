@@ -4,16 +4,20 @@ import * as React from "react";
 import {useLayoutEffect, useState} from "react";
 import LoaderPage from "@/components/custom/loaders/LoaderPage";
 import {refreshToken} from "@/rest/AuthProviderApplication";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {clearCredentials, setCredentials} from "@/state/authSlice";
 // @ts-ignore
 import Cookies from 'js-cookie';
 import {addUserProfile} from "@/service/UserProviderApplication";
+import {RootState} from "@/state/store";
+import {redirect, useRouter} from "next/navigation";
 
 export function RefreshTokenProvider({children}: Readonly<{ children: React.ReactNode }>) {
 
     const [isChecking, setIsChecking] = useState<boolean>(true);
+    const {authorities} = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
+    const router = useRouter();
 
     useLayoutEffect(() => {
         let isMounted = true;
@@ -32,7 +36,7 @@ export function RefreshTokenProvider({children}: Readonly<{ children: React.Reac
                     Cookies.set(process.env.NEXT_PUBLIC_COOKIE_TOKEN_NAME, response.headers[`${process.env.NEXT_PUBLIC_COOKIE_HEADER_NAME}`], {
                         expires: 1,
                     });
-                    addUserProfile(dispatch);
+                    addUserProfile(dispatch, router, response.data.authorities);
                     setIsChecking(false);
                 }
             })
