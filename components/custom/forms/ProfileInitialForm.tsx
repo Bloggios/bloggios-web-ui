@@ -12,6 +12,7 @@ import {dispatchError} from "@/utils/DispatchFunctions";
 import {useMutation} from "@tanstack/react-query";
 import {redirect, useRouter} from "next/navigation";
 import AuthenticatedAxiosInterceptor from "@/utils/AuthenticatedAxiosInterceptor";
+import {BLOG_PAGE} from "@/constants/UiPathConstants";
 
 export default function ProfileInitialForm() {
 
@@ -32,7 +33,6 @@ export default function ProfileInitialForm() {
     const {isAuthenticated, authorities} = useSelector((state: RootState) => state.auth);
     const [options, setOptions] = useState<string[]>([]);
     const dispatch = useDispatch();
-    const router = useRouter();
     const authAxios = AuthenticatedAxiosInterceptor();
 
     const addProfileMutation = useMutation({
@@ -47,7 +47,7 @@ export default function ProfileInitialForm() {
 
     useLayoutEffect(()=> {
         if (isAuthenticated && !authorities?.includes('ROLE_DUMMY')) {
-            redirect("/dashboard");
+            redirect("/");
         } else if (!isAuthenticated) {
             redirect("/login");
         }
