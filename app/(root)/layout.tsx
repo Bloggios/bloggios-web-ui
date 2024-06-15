@@ -7,7 +7,6 @@ import "../globals.css";
 import {ThemeProvider} from "next-themes";
 import BloggiosToast from "@/components/custom/BloggiosToast";
 import "react-quill/dist/quill.snow.css";
-import RedirectProfileNotAdded from "@/components/functional/RedirectProfileNotAdded";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const poppins = Poppins({

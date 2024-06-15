@@ -34,7 +34,7 @@ const BlogActionButton = ({data, isDividerShown = true}: { data: any, isDividerS
                         <small className={"text-sm"}>
                             10
                         </small>
-                        <AiOutlineLike className={"text-xl"}/>
+                        <AiOutlineLike className={"text-xl cursor-pointer"}/>
                     </div>
 
                     <Divider orientation={"vertical"} className={"h-6"}/>
@@ -43,7 +43,7 @@ const BlogActionButton = ({data, isDividerShown = true}: { data: any, isDividerS
                         <small className={"text-sm"}>
                             10
                         </small>
-                        {breakPoint ? <BlogCommentMobileDrawer/> : <BlogCommentDrawer data={data}/>}
+                        {breakPoint ? <BlogCommentMobileDrawer data={data}/> : <BlogCommentDrawer data={data}/>}
                     </div>
                 </div>
 

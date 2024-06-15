@@ -11,7 +11,6 @@ const BlogCommentField = () => {
 
     return (
         <div className={"flex flex-col my-6"}>
-            {isAuthenticated && (
                 <Card>
                     <CardHeader className={"p-3"}>
                         <div className={"flex items-center gap-2"}>
@@ -38,7 +37,6 @@ const BlogCommentField = () => {
                         </Button>
                     </CardFooter>
                 </Card>
-            )}
         </div>
     );
 };

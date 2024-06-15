@@ -10,7 +10,7 @@ import {clearCredentials, setCredentials} from "@/state/authSlice";
 import Cookies from 'js-cookie';
 import {addUserProfile} from "@/service/UserProviderApplication";
 import {RootState} from "@/state/store";
-import {redirect, useRouter} from "next/navigation";
+import {useRouter} from "next/navigation";
 
 export function RefreshTokenProvider({children}: Readonly<{ children: React.ReactNode }>) {
 

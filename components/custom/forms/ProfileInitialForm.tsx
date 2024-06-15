@@ -10,9 +10,8 @@ import {countWords} from "@/utils/StringUtils";
 import {addProfile, profileTagList} from "@/rest/UserAuthProviderApplication";
 import {dispatchError} from "@/utils/DispatchFunctions";
 import {useMutation} from "@tanstack/react-query";
-import {redirect, useRouter} from "next/navigation";
+import {redirect} from "next/navigation";
 import AuthenticatedAxiosInterceptor from "@/utils/AuthenticatedAxiosInterceptor";
-import {BLOG_PAGE} from "@/constants/UiPathConstants";
 
 export default function ProfileInitialForm() {
 

@@ -4,7 +4,7 @@ export const formatDate = (dateString: string): string => {
     return date.toLocaleDateString('en-US', options);
 };
 
-export const getPostedAgoString = (date: string) => {
+export const getPostedAgoString = (date: string | Date) => {
     const originalDate: any = new Date(date);
     const currentDate: any = new Date();
     const timeDiffInSeconds = Math.floor((currentDate - originalDate) / 1000);
