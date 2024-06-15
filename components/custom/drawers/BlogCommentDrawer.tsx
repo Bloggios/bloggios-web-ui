@@ -4,7 +4,9 @@ import {Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} f
 import {HiOutlineChatBubbleOvalLeftEllipsis} from "react-icons/hi2";
 import {useSelector} from "react-redux";
 import {RootState} from "@/state/store";
+import { FaEdit } from 'react-icons/fa'; 
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card";
+import { AiOutlineLike } from 'react-icons/ai';
 
 const BlogCommentDrawer = ({data}: { data: any }) => {
 
@@ -86,6 +88,47 @@ const BlogCommentDrawer = ({data}: { data: any }) => {
                         </DropdownMenu>
                     </Dropdown>
                 </SheetFooter>
+                <Card>
+                <CardHeader className={"p-3"}>
+                                <div className={"flex items-center gap-2 "}>
+                                    <Avatar
+                                        src={profileImage ? profileImage : ""}
+                                        showFallback={true}
+                                        size={"md"}
+                                    />
+
+                                <div className={"flex flex-col"}>
+                                    <span>Atharva</span>
+                                    <small className='text-xs text-muted-foreground'>2 months ago</small>
+                                </div>
+                                </div>
+                                
+                                <div className='flex flex-col mt-2 gap-2 custom-align'>
+                                <span>yes you are right!!!!
+                                commit can  also be done from terminal and from diffrent IDE.</span>
+                                <div className='flex gap-2 items-center'>
+                                    <Button isIconOnly size='sm' variant='light'>
+                                        <AiOutlineLike className='text-xl'/>
+                                    </Button>
+                                    <Button isIconOnly size='sm' variant='light'>
+                                        <HiOutlineChatBubbleOvalLeftEllipsis className='text-xl'/>
+                                        <span className='text-sm'>52</span>
+                                    </Button>
+
+                                    <Button size='lg'variant='light' className='pt-0.5 pb-2 px-4 mt-1'>Reply</Button>
+                                </div>
+                                
+
+                                </div>
+                        <Button
+                            isIconOnly={true}
+                            variant={"light"}
+                            size={"sm"}
+                            className={"text-xl"}
+                        >
+                        </Button>
+                            </CardHeader>
+                </Card>
             </SheetContent>
         </Sheet>
     );
