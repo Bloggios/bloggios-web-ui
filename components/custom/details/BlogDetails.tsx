@@ -10,7 +10,7 @@ import Image from "next/image";
 const BlogDetails = ({data}: { data: any }) => {
 
     return (
-        <div className={"mt-2 md:mt-6 flex flex-col gap-10"}>
+        <div className={"relative mt-2 md:mt-6 flex flex-col gap-10"}>
 
             {data.coverImage && (
                 <div className={"w-full"}>
@@ -36,7 +36,7 @@ const BlogDetails = ({data}: { data: any }) => {
 
             <BlogDetailsUserInfo data={data}/>
 
-            <BlogActionButton data={data}/>
+            <BlogActionButton data={data} />
 
             <div dangerouslySetInnerHTML={{__html: data.detailsHtml}}/>
 
@@ -74,7 +74,7 @@ const BlogDetails = ({data}: { data: any }) => {
                             className={"flex items-center justify-center text-xl"}
                             variant={"faded"}
                         >
-                            <AiOutlineMessage />
+                            <AiOutlineMessage/>
                         </Button>
                     </div>
                 </div>

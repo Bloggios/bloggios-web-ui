@@ -29,7 +29,7 @@ export default async function DynamicBlog({ params }: { params: { blogId: string
     const response = await getBlogDetails(blogId);
 
     return (
-        <main className={"max-w-screen-xl container flex h-auto flex-row gap-2 w-full mt-4 md:mt-10 pb-10"}>
+        <main className={"max-w-screen-xl min-w-[280px] container flex h-auto flex-row gap-2 w-full mt-4 md:mt-10 pb-10"}>
             <main className={"w-full md:w-[70%]"}>
                 <BlogDetails data={response} />
             </main>
