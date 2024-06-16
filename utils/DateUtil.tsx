@@ -1,10 +1,12 @@
 export const formatDate = (dateString: string): string => {
+    console.log(dateString)
     const date = new Date(dateString);
+    console.log(date)
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 };
 
-export const getPostedAgoString = (date: string) => {
+export const getPostedAgoString = (date: string | Date) => {
     const originalDate: any = new Date(date);
     const currentDate: any = new Date();
     const timeDiffInSeconds = Math.floor((currentDate - originalDate) / 1000);

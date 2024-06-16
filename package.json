@@ -3,10 +3,12 @@
   "version": "1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 2000",
+    "bloggios": "next dev -p 2000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "bloggios-prebuild": "npm run type-check && npm run lint"
   },
   "dependencies": {
     "@nextui-org/react": "^2.3.6",

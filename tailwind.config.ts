@@ -98,13 +98,24 @@ const config = {
             opacity: "1",
             transform: "translateY(0)",
           }
+        },
+        "slideup": {
+          from: {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          }
         }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
-        "slidein": "slidein var(--slidein-duration, 1s) ease var(--slidein-delay, 0ms) forwards"
+        "slidein": "slidein var(--slidein-duration, 1s) ease var(--slidein-delay, 0ms) forwards",
+        "slideup": "slideup var(--slidein-duration, 1s) ease var(--slidein-delay, 0ms) forwards"
       },
       transitionDuration: {
         'two-seconds': '2000ms'

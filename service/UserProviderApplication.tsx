@@ -2,10 +2,7 @@ import {Dispatch} from "redux";
 import {loggedInUserProfile} from "@/rest/UserAuthProviderApplication";
 import {setProfile} from "@/state/profileSlice";
 import {dispatchError} from "@/utils/DispatchFunctions";
-import {useSelector} from "react-redux";
-import {RootState} from "@/state/store";
-import {AxiosError} from "axios";
-import {ACCOUNT_INACTIVE_ERROR_CODE, PROFILE_NOT_FOUND_CODE} from "@/constants/ServiceConstants";
+import {PROFILE_NOT_FOUND_CODE} from "@/constants/ServiceConstants";
 
 export const addUserProfile = (dispatch: Dispatch, router: any, authorities: any) => {
         loggedInUserProfile()

@@ -1,7 +1,6 @@
 import React from 'react';
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
     DrawerDescription,
     DrawerFooter,
@@ -10,33 +9,35 @@ import {
     DrawerTrigger
 } from "@/components/ui/drawer";
 import {HiOutlineChatBubbleOvalLeftEllipsis} from "react-icons/hi2";
-import {Button} from "@/components/ui/button";
 import BlogCommentField from "@/components/custom/blog/BlogCommentField";
+import {useSelector} from "react-redux";
+import {RootState} from "@/state/store";
+import BlogCommentsList from "@/components/custom/blog/BlogCommentsList";
 
-const BlogCommentMobileDrawer = () => {
+const BlogCommentMobileDrawer = ({data}: {data: any}) => {
+
+    const {isAuthenticated} = useSelector((state: RootState) => state.auth);
+
     return (
         <Drawer>
             <DrawerTrigger asChild>
                 <HiOutlineChatBubbleOvalLeftEllipsis className={"text-xl"}/>
             </DrawerTrigger>
-            <DrawerContent className={"outline-none w-full"}>
-                <div className="mx-auto w-full">
+            <DrawerContent className={"outline-none w-full max-h-full"} >
+                <div className="mx-auto w-full" style={{
+                    overflowY: "auto"
+                }}>
                     <DrawerHeader>
                         <DrawerTitle className={"text-xl"}>
                             Discussions
                         </DrawerTitle>
 
                         <DrawerDescription>
-                            <BlogCommentField />
+                            {isAuthenticated && <BlogCommentField />}
                         </DrawerDescription>
                     </DrawerHeader>
-                    <div>
-                        Drawer
-                    </div>
                     <DrawerFooter>
-                        <Button>Submit</Button>
-                        <DrawerClose asChild>
-                        </DrawerClose>
+                        <BlogCommentsList />
                     </DrawerFooter>
                 </div>
             </DrawerContent>

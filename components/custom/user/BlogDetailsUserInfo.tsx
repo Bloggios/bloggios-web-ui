@@ -19,12 +19,12 @@ const BlogDetailsUserInfo = ({data} : {data: any}) => {
                 showFallback
                 isBordered
                 className={"w-10 h-10 md:w-12 md:h-12 cursor-pointer"}
-                onClick={()=> router.push(`/profile/${data.email}`)}
+                onClick={()=> router.push(`/${data.email}`)}
             />
 
             <div className={"flex flex-col gap-0"}>
                 <div className={"flex gap-2 items-center"}>
-                    <small onClick={()=> router.push(`/profile/${data.email}`)} className={"text-medium md:text-large cursor-pointer"}>{data.name}</small>
+                    <small onClick={()=> router.push(`/${data.email}`)} className={"text-medium md:text-large cursor-pointer"}>{data.name}</small>
                     {isAuthenticated && (
                         <>
                             <small className={"text-medium md:text-large"}>•</small>

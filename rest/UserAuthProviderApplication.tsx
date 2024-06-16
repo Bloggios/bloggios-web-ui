@@ -1,5 +1,11 @@
-import {authenticatedAxios} from "@/rest/BaseAxios";
-import {ADD_PROFILE, ADD_PROFILE_IMAGE, LOGGED_IN_USER_PROFILE, PROFILE_TAGS} from "@/constants/ApiEndpointConstants";
+import {authenticatedAxios, gatewayAxios} from "@/rest/BaseAxios";
+import {
+    ADD_PROFILE,
+    ADD_PROFILE_IMAGE,
+    GET_USER_PROFILE,
+    LOGGED_IN_USER_PROFILE,
+    PROFILE_TAGS
+} from "@/constants/ApiEndpointConstants";
 import {ProfileInitialData} from "@/interfaces/ProfileInitialData";
 
 
@@ -18,10 +24,10 @@ export const loggedInUserProfile = () => {
         .then(response => response.data);
 }
 
-export const addProfileImage = (formData: any, authAxios: any) => {
-    authAxios.post(ADD_PROFILE_IMAGE, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    }).then((response: {data: any;}) => response.data);
+export const getUserProfile = (email: string) => {
+    return gatewayAxios.get(GET_USER_PROFILE, {
+        params: {
+            email: email,
+        }
+    }).then((response)=> response);
 }

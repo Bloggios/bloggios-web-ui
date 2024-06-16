@@ -4,11 +4,10 @@ import {Button} from "@/components/ui/button";
 import {GitHubLogoIcon} from "@radix-ui/react-icons";
 import google_logo from "@/public/assets/google.svg";
 import Image from "next/image";
-import {googleLogout, useGoogleLogin} from "@react-oauth/google";
+import {useGoogleLogin} from "@react-oauth/google";
 import {loginGoogle} from "@/rest/AuthProviderApplication";
 import {useRouter, useSearchParams} from "next/navigation";
 import {BLOG_PAGE} from "@/constants/UiPathConstants";
-import {dispatchError} from "@/utils/DispatchFunctions";
 import {useDispatch} from "react-redux";
 
 export default function SocialAuthButtons({

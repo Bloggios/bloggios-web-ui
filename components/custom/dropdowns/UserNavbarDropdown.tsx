@@ -16,7 +16,7 @@ import {logoutUser} from "@/rest/AuthProviderApplication";
 import {AxiosError} from "axios";
 import {dispatchError} from "@/utils/DispatchFunctions";
 import {useRouter} from "next/navigation";
-import {googleLogout} from "@react-oauth/google";
+import {LOGIN_PAGE} from "@/constants/UiPathConstants";
 
 export default function UserNavbarDropdown() {
 
@@ -28,7 +28,7 @@ export default function UserNavbarDropdown() {
     const logoutUserMutation = useMutation({
         mutationFn: ()=> logoutUser(),
         onSuccess: () => {
-            router.push("/login")
+            router.push(LOGIN_PAGE)
         },
         onError: (error: AxiosError) => {
             dispatchError(dispatch, error);
@@ -86,7 +86,7 @@ export default function UserNavbarDropdown() {
                 </DropdownSection>
 
                 <DropdownSection showDivider>
-                    <DropdownItem onClick={()=> router.push("/profile")} key={"profile"}>
+                    <DropdownItem onClick={()=> router.push(`/${email}`)} key={"profile"}>
                         Profile
                     </DropdownItem>
 
