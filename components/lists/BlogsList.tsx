@@ -9,6 +9,10 @@ import {MdErrorOutline} from "react-icons/md";
 import {Button as ShadButton} from "@/components/ui/button";
 import {BiRefresh} from "react-icons/bi";
 import {useRouter} from "next/navigation";
+import Image from "next/image";
+import {TextGenerateEffect} from "@/components/aceternity/TextGenerateEffect";
+import {Button} from "@nextui-org/react";
+import {BLOG_WRITE} from "@/constants/UiPathConstants";
 
 export default function BlogsList() {
 
@@ -62,6 +66,21 @@ export default function BlogsList() {
                     {postData}
                     {isLoading && data.length > 0 && <BlogSkeleton />}
                 </>
+            )
+        } else if (!isLoading && !isError && data.length === 0) {
+            return (
+                <div className={"flex flex-col gap-4 items-center mt-6 animate-slidein opacity-0"}>
+                    <h2 className={"text-2xl md:text-3xl text-center"}>
+                        Oops! Nothing here yet...
+                    </h2>
+                    <h4 className={"text-xl text-center text-muted-foreground"}>
+                        Why not be the pioneer?<br/>
+                        Start your blog on Bloggios and set the trend
+                    </h4>
+                    <Button className={"bg-bloggios text-white"} onPress={()=> router.push(BLOG_WRITE)}>
+                        Write Blog
+                    </Button>
+                </div>
             )
         }
     }, [data, isError, isLoading, postData])

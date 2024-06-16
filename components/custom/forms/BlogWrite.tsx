@@ -551,7 +551,7 @@ const BlogWrite = () => {
 
     return (
         <>
-            <div className={"flex-1 w-full pb-10"}>
+            <div className={"flex-1 w-full pb-10 animate-slideup opacity-0"}>
                 <main className={"max-w-screen-xl container flex h-auto flex-col gap-2 w-full mt-4 md:mt-10 "}>
 
                     <div className={"flex justify-end mb-2"}>

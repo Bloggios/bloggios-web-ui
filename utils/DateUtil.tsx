@@ -1,5 +1,7 @@
 export const formatDate = (dateString: string): string => {
+    console.log(dateString)
     const date = new Date(dateString);
+    console.log(date)
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 };

@@ -45,7 +45,7 @@ const BlogCard = React.forwardRef<HTMLDivElement, BlogCardProps>((props: BlogCar
                             name: "",
                             isBordered: true
                         }}
-                        onClick={(event) => handlePropagationClick(event, () => router.push(`/profile/${props.data.email}`))}
+                        onClick={(event) => handlePropagationClick(event, () => router.push(`/${props.data.email}`))}
                         classNames={{
                             name: "hover:underline cursor-pointer"
                         }}

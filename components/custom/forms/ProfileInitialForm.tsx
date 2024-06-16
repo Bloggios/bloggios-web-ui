@@ -12,6 +12,7 @@ import {dispatchError} from "@/utils/DispatchFunctions";
 import {useMutation} from "@tanstack/react-query";
 import {redirect} from "next/navigation";
 import AuthenticatedAxiosInterceptor from "@/utils/AuthenticatedAxiosInterceptor";
+import LoaderPage from "@/components/custom/loaders/LoaderPage";
 
 export default function ProfileInitialForm() {
 
@@ -33,11 +34,22 @@ export default function ProfileInitialForm() {
     const [options, setOptions] = useState<string[]>([]);
     const dispatch = useDispatch();
     const authAxios = AuthenticatedAxiosInterceptor();
+    const [pageLoader, setPageLoader] = useState(false);
+
+    const handleProfileAdditionSuccess = () => {
+        const timeout = setTimeout(()=> {
+            window.location.reload();
+            setPageLoader(false);
+        }, 2000)
+
+        return ()=> clearTimeout(timeout);
+    }
 
     const addProfileMutation = useMutation({
         mutationFn: (data: any)=> addProfile(data, authAxios),
         onSuccess: ()=> {
-            window.location.reload();
+            setPageLoader(true);
+            handleProfileAdditionSuccess();
         },
         onError: (error: any) => {
             dispatchError(dispatch, error);
@@ -316,51 +328,54 @@ export default function ProfileInitialForm() {
     }, [currentStep, profileData, error])
 
     return (
-        <div className={"flex flex-col gap-10 mt-4 w-full transition-all duration-250"}>
-            <div className={"flex w-full items-center justify-between relative z-[1]"}>
-                {[1, 2, 3, 4].map((step, index) => (
-                    <div key={index}
-                         className={"flex items-center justify-center h-[28px] aspect-square rounded-full bg-[#4258ff] transition-all duration-200 ease-in-out"}>
-                        {getIcon(step)}
+        pageLoader ? <LoaderPage /> : (
+            <div className={"flex flex-col gap-10 mt-4 w-full transition-all duration-250"}>
+                <div className={"flex w-full items-center justify-between relative z-[1]"}>
+                    {[1, 2, 3, 4].map((step, index) => (
+                        <div key={index}
+                             className={"flex items-center justify-center h-[28px] aspect-square rounded-full bg-[#4258ff] transition-all duration-200 ease-in-out"}>
+                            {getIcon(step)}
+                        </div>
+                    ))}
+                    <div className={"absolute h-[2px] w-full overflow-hidden bg-[#e5e5e5] dark:bg-muted"}
+                         style={{zIndex: -1}}>
+                        <div className="absolute h-full bg-[#465cff] transition-all duration-300 ease-in-out"
+                             style={{width: `${((currentStep - 1) / 3) * 100}%`}}/>
                     </div>
-                ))}
-                <div className={"absolute h-[2px] w-full overflow-hidden bg-[#e5e5e5] dark:bg-muted"}
-                     style={{zIndex: -1}}>
-                    <div className="absolute h-full bg-[#465cff] transition-all duration-300 ease-in-out"
-                         style={{width: `${((currentStep - 1) / 3) * 100}%`}}/>
+                </div>
+
+                <div className={"flex flex-col gap-4 transition-all duration-250"}>
+                    {getInputFieldContents()}
+                </div>
+
+                <div className={"flex gap-2 w-full transition-all duration-250"}>
+                    {currentStep !== 1 && (
+                        <Button id="prev" isDisabled={addProfileMutation.isPending} variant={"bordered"}
+                                color={"primary"} disabled={currentStep === 1}
+                                onClick={updateSteps}>
+                            Prev
+                        </Button>
+                    )}
+                    {currentStep !== 4 && (
+                        <Button id="next" className={"w-full"} color={"primary"} disabled={currentStep === 4}
+                                onClick={updateSteps}>
+                            Next
+                        </Button>
+                    )}
+                    {currentStep === 4 && (
+                        <Button color={"primary"} className={"w-full"} onClick={handleSubmit}>
+                            {addProfileMutation.isPending ? (
+                                <CircularProgress
+                                    color="secondary"
+                                    classNames={{
+                                        svg: "w-7 h-7"
+                                    }}
+                                />
+                            ) : "Submit"}
+                        </Button>
+                    )}
                 </div>
             </div>
-
-            <div className={"flex flex-col gap-4 transition-all duration-250"}>
-                {getInputFieldContents()}
-            </div>
-
-            <div className={"flex gap-2 w-full transition-all duration-250"}>
-                {currentStep !== 1 && (
-                    <Button id="prev" isDisabled={addProfileMutation.isPending} variant={"bordered"} color={"primary"} disabled={currentStep === 1}
-                            onClick={updateSteps}>
-                        Prev
-                    </Button>
-                )}
-                {currentStep !== 4 && (
-                    <Button id="next" className={"w-full"} color={"primary"} disabled={currentStep === 4}
-                            onClick={updateSteps}>
-                        Next
-                    </Button>
-                )}
-                {currentStep === 4 && (
-                    <Button color={"primary"} className={"w-full"} onClick={handleSubmit}>
-                        {addProfileMutation.isPending ? (
-                            <CircularProgress
-                                color="secondary"
-                                classNames={{
-                                    svg: "w-7 h-7"
-                                }}
-                            />
-                        ) : "Submit"}
-                    </Button>
-                )}
-            </div>
-        </div>
+        )
     )
 }

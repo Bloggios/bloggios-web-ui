@@ -9,12 +9,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bloggios Prebuild
+        run: npm run bloggios-prebuild
+
       - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.V4_HOST }}
-          username: ${{ secrets.V4_USERNAME }}
-          key: ${{ secrets.V4_VPS_PRIVATE_KEY }}
+          host: ${{ secrets.V8_HOST }}
+          username: ${{ secrets.V8_USERNAME }}
+          key: ${{ secrets.V8_VPS_PRIVATE_KEY }}
           port: 22
           script: |
             cd /root/bloggios-web-ui
@@ -22,4 +36,4 @@ jobs:
             npm cache clean --force 
             npm install
             npm run build
-            pm2 restart devsandbox.config.js
+            pm2 restart app.config.js

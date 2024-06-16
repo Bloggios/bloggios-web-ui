@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: "bloggios-web-ui-devsandbox",
+            name: "bloggios-web-ui",
             script: "npm",
             interpreter: "none",
             args: "start",

@@ -27,11 +27,11 @@ const UserInfo = ({
                 isBordered
                 className={`cursor-pointer ${isBadge ? "outline-[#4258ff]" : ''}`}
                 size={"sm"}
-                onClick={() => router.push(`/profile/${email}`)}
+                onClick={() => router.push(`/${email}`)}
             />
 
             <div className={"flex flex-col gap-0"}>
-                <small onClick={() => router.push(`/profile/${email}`)}
+                <small onClick={() => router.push(`/${email}`)}
                        className={"text-small cursor-pointer"}>{name}</small>
                 <small className={"text-muted-foreground"}>{getPostedAgoString(date)}</small>
             </div>
