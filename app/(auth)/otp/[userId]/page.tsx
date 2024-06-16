@@ -1,5 +1,4 @@
 import {Metadata} from "next";
-import bgAccentOuterRounded from "@/public/assets/bg_accent_outer_rounded.svg";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {uuidValidator} from "@/utils/Validators";
 import {redirect} from "next/navigation";
@@ -15,7 +14,7 @@ export const metadata : Metadata = {
         description: "OTP Verification to continue to Bloggios, your all-in-one platform for blog, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
         type: "website",
         url: "https://dev.bloggios.in/otp/",
-        images: bgAccentOuterRounded,
+        images: "/assets/bg_accent_outer_rounded.svg",
     },
     twitter: {
         title: "Bloggios OTP Verification",

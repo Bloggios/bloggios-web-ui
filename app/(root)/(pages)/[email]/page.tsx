@@ -1,15 +1,4 @@
-import {Divider} from "@nextui-org/react";
 import {cache} from 'react';
-import Image from "next/image";
-import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
-import {AiOutlineUserAdd} from "react-icons/ai";
-import {BsFillChatSquareDotsFill} from "react-icons/bs";
-import {FaRegUser, FaShare} from "react-icons/fa";
-import {IoIdCardOutline} from "react-icons/io5";
-import {formatDate} from "@/utils/DateUtil";
-import {MdMailOutline} from "react-icons/md";
-import ImageUploadingAvatar from "@/components/custom/ImageUploadingAvatar";
 import {EMAIL_REGEX} from "@/constants/ServiceConstants";
 import {notFound} from "next/navigation";
 import {getUserProfile} from "@/rest/UserAuthProviderApplication";
