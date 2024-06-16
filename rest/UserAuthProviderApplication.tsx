@@ -1,11 +1,5 @@
 import {authenticatedAxios, gatewayAxios} from "@/rest/BaseAxios";
-import {
-    ADD_PROFILE,
-    ADD_PROFILE_IMAGE,
-    GET_USER_PROFILE,
-    LOGGED_IN_USER_PROFILE,
-    PROFILE_TAGS
-} from "@/constants/ApiEndpointConstants";
+import {ADD_PROFILE, GET_USER_PROFILE, LOGGED_IN_USER_PROFILE, PROFILE_TAGS} from "@/constants/ApiEndpointConstants";
 import {ProfileInitialData} from "@/interfaces/ProfileInitialData";
 
 

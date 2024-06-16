@@ -9,8 +9,6 @@ import {MdErrorOutline} from "react-icons/md";
 import {Button as ShadButton} from "@/components/ui/button";
 import {BiRefresh} from "react-icons/bi";
 import {useRouter} from "next/navigation";
-import Image from "next/image";
-import {TextGenerateEffect} from "@/components/aceternity/TextGenerateEffect";
 import {Button} from "@nextui-org/react";
 import {BLOG_WRITE} from "@/constants/UiPathConstants";
 

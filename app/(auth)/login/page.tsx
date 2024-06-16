@@ -4,7 +4,6 @@ import SocialAuthButtons from "@/components/custom/buttons/SocialAuthButtons";
 import TextDivider from "@/components/custom/TextDivider";
 import Link from "next/link";
 import {Separator} from "@/components/ui/separator";
-import bgAccentOuterRounded from "@/public/assets/bg_accent_outer_rounded.svg";
 import dynamic from "next/dynamic";
 
 const LoginForm = dynamic(()=> import("@/components/custom/forms/LoginForm"));
@@ -19,7 +18,7 @@ export const metadata : Metadata = {
         description: "Login to Bloggios, your all-in-one platform for blog, Q&A, posts, messaging, and more. Connect with a vibrant community, share your insights, ask questions, and stay informed. Join Bloggios today!",
         type: "website",
         url: "https://dev.bloggios.in/login",
-        images: bgAccentOuterRounded,
+        images: "/assets/bg_accent_outer_rounded.svg",
     },
     twitter: {
         title: "Bloggios Login",
