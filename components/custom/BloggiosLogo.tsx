@@ -3,7 +3,6 @@
 import Image from "next/image";
 import {useTheme} from "next-themes";
 import {useMemo} from "react";
-import bloggios_black from "@/public/assets/bg_logo_rounded_black.svg";
 
 export default function BloggiosLogo() {
 
@@ -12,7 +11,7 @@ export default function BloggiosLogo() {
     return useMemo(() => {
         if (resolvedTheme === "dark") {
             return <Image
-                src={bloggios_black}
+                src={"/assets/bg_logo_rounded_black.svg"}
                 alt={"Bloggios"}
                 height={34}
                 width={34}
