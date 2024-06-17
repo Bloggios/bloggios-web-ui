@@ -5,7 +5,7 @@ const nextConfig = {
         missingSuspenseWithCSRBailout: false
     },
     images: {
-        domains: ['bloggios.com']
+        domains: ['assets.bloggios.com']
     }
 };
 
