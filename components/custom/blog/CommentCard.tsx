@@ -17,6 +17,7 @@ const CommentCard = () => {
                     profileImage={""}
                     date={"2024-06-10T18:02:22.791+00:00"}
                     email={"rohit@bloggios.com"}
+                    username={"rohit"}
                 />
             </CardHeader>
 
