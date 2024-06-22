@@ -8,13 +8,15 @@ const UserInfo = ({
                       profileImage,
                       date,
                       email,
-                      isBadge
+                      isBadge,
+                      username
                   }: {
     name: string,
     profileImage: any,
     date: Date | string,
     email: string,
     isBadge?: boolean | null
+    username: string
 }) => {
 
     const router = useRouter();
@@ -27,11 +29,11 @@ const UserInfo = ({
                 isBordered
                 className={`cursor-pointer ${isBadge ? "outline-[#4258ff]" : ''}`}
                 size={"sm"}
-                onClick={() => router.push(`/${email}`)}
+                onClick={() => router.push(`/${username}`)}
             />
 
             <div className={"flex flex-col gap-0"}>
-                <small onClick={() => router.push(`/${email}`)}
+                <small onClick={() => router.push(`/${username}`)}
                        className={"text-small cursor-pointer"}>{name}</small>
                 <small className={"text-muted-foreground"}>{getPostedAgoString(date)}</small>
             </div>

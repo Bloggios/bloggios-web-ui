@@ -18,10 +18,10 @@ export const loggedInUserProfile = () => {
         .then(response => response.data);
 }
 
-export const getUserProfile = (email: string) => {
+export const getUserProfile = (username: string) => {
     return gatewayAxios.get(GET_USER_PROFILE, {
         params: {
-            email: email,
+            username: username,
         }
     }).then((response)=> response);
 }

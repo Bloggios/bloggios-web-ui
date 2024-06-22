@@ -20,7 +20,7 @@ import {LOGIN_PAGE} from "@/constants/UiPathConstants";
 
 export default function UserNavbarDropdown() {
 
-    const {isAuthenticated, email} = useSelector((state: RootState) => state.auth);
+    const {isAuthenticated, email, username} = useSelector((state: RootState) => state.auth);
     const {profileImage} = useSelector((state: RootState) => state.profile);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -80,13 +80,13 @@ export default function UserNavbarDropdown() {
                             isReadOnly
                         >
                             <p className="text-default-600">Logged in as</p>
-                            <p className="text-xs text-default-500 overflow-ellipsis overflow-hidden">{email}</p>
+                            <p className="text-xs text-default-500 overflow-ellipsis overflow-hidden">{username}</p>
                         </DropdownItem>
                     ) : <></>}
                 </DropdownSection>
 
                 <DropdownSection showDivider>
-                    <DropdownItem onClick={()=> router.push(`/${email}`)} key={"profile"}>
+                    <DropdownItem onClick={()=> router.push(`/${username}`)} key={"profile"}>
                         Profile
                     </DropdownItem>
 

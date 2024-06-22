@@ -1,9 +1,11 @@
-name: bloggios-web-ui
+name: bloggios-web-ui load
 
 on:
-  push:
-    branches: [ main ]
-
+  workflow_run:
+    workflows: ["bloggios-web-ui"]
+    types:
+      - completed
+        
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,18 +19,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Bloggios Prebuild
-        run: npm run bloggios-prebuild
-
       - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.V8_HOST }}
-          username: ${{ secrets.V8_USERNAME }}
-          key: ${{ secrets.V8_VPS_PRIVATE_KEY }}
+          host: ${{ secrets.V4_HOST }}
+          username: ${{ secrets.V4_USERNAME }}
+          key: ${{ secrets.V4_VPS_PRIVATE_KEY }}
           port: 22
           script: |
             cd /root/bloggios-web-ui

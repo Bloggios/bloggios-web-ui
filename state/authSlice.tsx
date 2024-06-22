@@ -27,6 +27,7 @@ interface AuthSliceState {
     remoteAddress: string | null,
     authorities: string | null,
     email: string | null,
+    username: string | null
 }
 
 const initialState: AuthSliceState = {
@@ -35,7 +36,8 @@ const initialState: AuthSliceState = {
     isAuthenticated: false,
     remoteAddress: null,
     authorities: null,
-    email: null
+    email: null,
+    username: null,
 };
 
 const authSlice = createSlice({
@@ -43,13 +45,14 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setCredentials: (state, action) => {
-            const {userId, accessToken, isAuthenticated, remoteAddress, authorities, email} = action.payload;
+            const {userId, accessToken, isAuthenticated, remoteAddress, authorities, email, username} = action.payload;
             state.userId = userId;
             state.accessToken = accessToken;
             state.isAuthenticated = isAuthenticated;
             state.remoteAddress = remoteAddress;
             state.authorities = authorities;
             state.email = email;
+            state.username = username;
         },
         clearCredentials: (state) => {
             state.userId = null;
@@ -58,6 +61,7 @@ const authSlice = createSlice({
             state.remoteAddress = null;
             state.authorities = null;
             state.email = null;
+            state.username = null;
         }
     }
 });

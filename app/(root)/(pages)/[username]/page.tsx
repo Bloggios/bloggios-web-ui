@@ -15,20 +15,17 @@ import UserProfileCard from "@/components/route_components/profile/UserProfileCa
 //     return profileResponse.data;
 // })
 
-const getProfileAuth = cache(async (email: string) => {
+const getProfileAuth = cache(async (username: string) => {
     try {
-        const profile = await getUserProfile(email);
+        const profile = await getUserProfile(username);
         return profile.data;
     } catch (error) {
         return notFound();
     }
 });
 
-export async function generateMetadata({ params }: { params: { email: string } }) {
-    const finalMail = params.email.replace("%40", "@");
-    if (!EMAIL_REGEX.test(finalMail)) {
-        notFound();
-    }
+export async function generateMetadata({ params }: { params: { username: string } }) {
+    const finalMail = params.username.replace("%40", "@");
     const profileAuth = await getProfileAuth(finalMail);
     return {
         title: `${profileAuth.name} - Bloggios user Profile`,
@@ -36,12 +33,9 @@ export async function generateMetadata({ params }: { params: { email: string } }
     }
 }
 
-export default async function ProfilePage({ params }: { params: { email: string } }) {
+export default async function ProfilePage({ params }: { params: { username: string } }) {
 
-    const finalMail = params.email.replace("%40", "@");
-    if (!EMAIL_REGEX.test(finalMail)) {
-        notFound();
-    }
+    const finalMail = params.username.replace("%40", "@");
 
     const profileAuth = await getProfileAuth(finalMail);
 
