@@ -7,6 +7,7 @@ import {dispatchError} from "@/utils/DispatchFunctions";
 import {AxiosError} from "axios";
 import {useDispatch} from "react-redux";
 import {useRouter} from "next/navigation";
+import {deleteCookie} from "cookies-next";
 
 export default function LogoutButton() {
 
@@ -16,6 +17,7 @@ export default function LogoutButton() {
     const logoutUserMutation = useMutation({
         mutationFn: ()=> logoutUser(),
         onSuccess: () => {
+            deleteCookie('bloggios-cookie-mgmt-token');
             router.push("/login")
         },
         onError: (error: AxiosError) => {

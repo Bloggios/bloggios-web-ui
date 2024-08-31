@@ -81,7 +81,7 @@ export default function BlogsList() {
                 </div>
             )
         }
-    }, [data, isError, isLoading, postData])
+    }, [data, isError, isLoading, postData, router])
 
     return (
         <div className={"flex flex-col gap-4 mb-10"}>

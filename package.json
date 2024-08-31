@@ -30,6 +30,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "cookie": "^0.6.0",
+    "cookies-next": "^4.2.1",
     "file-saver": "^2.0.5",
     "framer-motion": "^11.2.10",
     "input-otp": "^1.2.4",

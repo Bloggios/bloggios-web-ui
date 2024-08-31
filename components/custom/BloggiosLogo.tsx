@@ -4,7 +4,7 @@ import Image from "next/image";
 import {useTheme} from "next-themes";
 import {useMemo} from "react";
 
-export default function BloggiosLogo() {
+export default function BloggiosLogo({size = 34}) {
 
     const {resolvedTheme} = useTheme();
 
@@ -13,15 +13,15 @@ export default function BloggiosLogo() {
             return <Image
                 src={"/assets/bg_logo_rounded_black.svg"}
                 alt={"Bloggios"}
-                height={34}
-                width={34}
+                height={size}
+                width={size}
             />
         } else {
             return <Image
                 src={"/assets/bg_accent_outer_rounded.svg"}
                 alt={"Bloggios"}
-                height={34}
-                width={34}
+                height={size}
+                width={size}
             />
         }
     }, [resolvedTheme]);

@@ -1,8 +1,5 @@
-import {cache} from 'react';
-import {EMAIL_REGEX} from "@/constants/ServiceConstants";
-import {notFound} from "next/navigation";
-import {getUserProfile} from "@/rest/UserAuthProviderApplication";
 import UserProfileCard from "@/components/route_components/profile/UserProfileCard";
+import {getProfileAuth} from "@/rest/ServerFetch";
 
 // const getProfileAuth = cache(async () => {
 //     let cookies1 = cookies();
@@ -14,15 +11,6 @@ import UserProfileCard from "@/components/route_components/profile/UserProfileCa
 //     });
 //     return profileResponse.data;
 // })
-
-const getProfileAuth = cache(async (username: string) => {
-    try {
-        const profile = await getUserProfile(username);
-        return profile.data;
-    } catch (error) {
-        return notFound();
-    }
-});
 
 export async function generateMetadata({ params }: { params: { username: string } }) {
     const finalMail = params.username.replace("%40", "@");
@@ -47,7 +35,6 @@ export default async function ProfilePage({ params }: { params: { username: stri
 
             <div className={"w-full lg:w-[70%]"}>
                 Details
-
             </div>
         </main>
     )
