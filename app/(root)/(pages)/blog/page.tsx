@@ -1,7 +1,8 @@
 import React from 'react';
 import BlogsList from "@/components/lists/BlogsList";
-import PrimaryAsideSection from "@/components/custom/pages/home/PrimaryAsideSection";
+import PrimaryAsideSection from "@/components/custom/asides/PrimaryAsideSection";
 import InformationFooter from "@/components/InformationFooter";
+import NewsAsideSection from "@/components/custom/asides/NewsAsideSection";
 
 export const metadata = {
     title: "Home - Bloggios",
@@ -20,7 +21,7 @@ export default function DashboardPage() {
                 <BlogsList/>
             </main>
             <aside className={"hidden lg:flex md:w-[23%]"}>
-                Aside Section
+                <NewsAsideSection />
             </aside>
         </main>
     )
